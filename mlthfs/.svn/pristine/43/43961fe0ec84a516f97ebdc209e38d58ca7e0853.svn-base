@@ -1,0 +1,294 @@
+package com.hhu.mlthfs.controller.plan.planassess;
+
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.google.common.collect.Maps;
+import com.hhu.mlthfs.base.BaseController;
+import com.hhu.mlthfs.model.PlanInfo;
+import com.hhu.mlthfs.model.SelectedFactors;
+import com.hhu.mlthfs.model.TestResult;
+import com.hhu.mlthfs.model.TrainResult;
+import com.hhu.mlthfs.utils.LayerData;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
+
+import javax.servlet.ServletRequest;
+import java.io.IOException;
+import java.util.*;
+
+import static com.hhu.mlthfs.utils.ExcelUtils.excelToJson;
+
+/**
+ * 方案详情界面planinfoPage 控制层
+ */
+@RestController
+@RequestMapping("/plan")
+public class PlanInfoController extends BaseController {
+
+    public static final Logger logger = LoggerFactory.getLogger(PlanInfoController.class);
+
+    /**
+     * 进入系统 方案详情界面。
+     *
+     * @return
+     */
+    @GetMapping("/planinfoPage")
+    public ModelAndView planinfoIndex() {
+        ModelAndView mav = new ModelAndView("page/plan/planinfo/planinfoPage");
+        return mav;
+    }
+
+    /**
+     * 获取方案信息，用于展示在方案详情界面。
+     */
+    @GetMapping("/planinfo")
+    public LayerData<PlanInfo> list(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                    @RequestParam(value = "limit", defaultValue = "10") Integer limit,
+                                    ServletRequest request) {
+        Map map = WebUtils.getParametersStartingWith(request, "s_");
+        LayerData<PlanInfo> planInfoLayerData = new LayerData<>();
+        EntityWrapper<PlanInfo> planInfoEntityWrapper = new EntityWrapper<>();
+        planInfoEntityWrapper.eq("del_flag", false);
+        planInfoEntityWrapper.like("plan_type", "0");//单模型方案
+        if (!map.isEmpty()) {
+            String keys = (String) map.get("key");
+            if (StringUtils.isNotBlank(keys)) {
+                planInfoEntityWrapper.like("forecast_section", keys);
+            } else {
+                map.remove("key");
+            }
+//             起报时间
+            String forecastTimeStart = (String) map.get("forecastTimeStart");
+            if (StringUtils.isNotBlank(forecastTimeStart)) {
+                planInfoEntityWrapper.like("forecast_time_start", forecastTimeStart);
+            } else {
+                map.remove("forecastTimeStart");
+            }
+
+        }
+        Page<PlanInfo> planInfoPage = planInfoService.selectPage(new Page<>(page, limit), planInfoEntityWrapper);
+        planInfoLayerData.setCount(planInfoPage.getTotal());
+        planInfoLayerData.setData(planInfoPage.getRecords());
+        logger.info(planInfoLayerData.toString());
+        return planInfoLayerData;
+    }
+
+    /**
+     * 点击方案详细信息，进入到方案详情界面
+     *
+     * @param planId
+     * @param forecastTimeStart
+     * @param forecastTimeEnd
+     * @param forecastSection
+     * @param model
+     * @return
+     */
+    @GetMapping("/planinfo/edit")
+    public ModelAndView edit(String planId,
+                             String forecastTimeStart,
+                             String forecastTimeEnd,
+                             String forecastSection,
+                             Model model) {
+        logger.info("forecastTimeStart==" + forecastTimeStart);
+        logger.info("forecastTimeEnd==" + forecastTimeEnd);
+        logger.info("planId==" + planId);
+        logger.info("forecastSection==" + forecastSection);
+        model.addAttribute("forecastTimeStart", forecastTimeStart);
+        model.addAttribute("forecastTimeEnd", forecastTimeEnd);
+        model.addAttribute("planId", planId);
+        model.addAttribute("forecastSection", forecastSection);
+        ModelAndView mav = new ModelAndView("page/plan/planinfo/edit");
+        return mav;
+    }
+
+
+    //  @GetMapping("/planinfo/editTable")
+    public String jsonTable(Model model) throws IOException {
+        String excelPath1 = "F:\\forecast_plans\\DanJiangKou\\sys_plan_2018-11_RF_01\\selectedFactors.xlsx"; //Excel2007
+        //excel转换成json
+        LinkedHashMap<String, String> excelMap = excelToJson(excelPath1);
+//        System.out.println(excelMap.get(1+"月"));
+//        System.out.println(excelMap.get("1月").length());
+
+        Map<String, Object> result = Maps.newHashMap();
+        result.put("status", 200);
+        result.put("message", "");
+//        result.put("total",excelMap.get("1月").length());
+        result.put("rows", excelMap.get("1月"));
+        System.out.println(result.toString());
+
+//        JSONObject itemJSONObj = JSONObject.parseObject(JSON.toJSONString(result));
+//
+//        System.out.println(itemJSONObj);
+//        System.out.println(itemJSONObj.toString());
+
+
+        JSONObject json = new JSONObject(result);
+
+        System.out.println(json);
+        System.out.println(json.toString());
+        System.out.println(json.toString()
+                .replaceAll("\\\\", "")
+                .replaceAll("\"\\[", "\\[")
+                .replaceAll("]\"", "]"));
+
+        String jsonda = json.toString()
+                .replaceAll("\\\\", "")
+                .replaceAll("\"\\[", "\\[")
+                .replaceAll("]\"", "]");
+        System.out.println("+++++++" + jsonda);
+        return jsonda;
+    }
+
+    /**
+     * 展示预报因子的表格
+     *
+     * @param page
+     * @param limit
+     * @param request
+     * @param forecastTimeStart
+     * @param forecastSection
+     * @return
+     */
+    @GetMapping("/planinfo/edit/detail")
+    public LayerData<SelectedFactors> listDetail(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                 @RequestParam(value = "limit", defaultValue = "15") Integer limit,
+                                                 ServletRequest request,
+                                                 String forecastTimeStart,
+                                                 String forecastSection) {
+        LayerData<SelectedFactors> selectedFactorsLayerData = new LayerData<>();
+        Map map = WebUtils.getParametersStartingWith(request, "s_");
+        EntityWrapper<SelectedFactors> selectedFactorsEntityWrapper = new EntityWrapper<>();
+        selectedFactorsEntityWrapper.eq("forecast_section", forecastSection);
+        selectedFactorsEntityWrapper.eq("forecast_time_start", forecastTimeStart);
+
+        if (!map.isEmpty()) {
+            String forecastTime = (String) map.get("forecastTime");
+            if (StringUtils.isNotBlank(forecastTime)) {
+                selectedFactorsEntityWrapper.like("forecast_time", forecastTime);
+            } else {
+                map.remove("forecastTime");
+            }
+        }
+
+        Page<SelectedFactors> selectedFactorsPage = selectedFactorsService.selectPage(new Page<>(page, limit), selectedFactorsEntityWrapper);
+        selectedFactorsLayerData.setCount(selectedFactorsPage.getTotal());
+        selectedFactorsLayerData.setData(selectedFactorsPage.getRecords());
+        logger.info(selectedFactorsLayerData.toString());
+
+        return selectedFactorsLayerData;
+    }
+
+    /**
+     * 用于展示率定结果图
+     *
+     * @param request
+     * @param planId
+     * @param forecastTimeStart
+     * @param forecastSection
+     * @return
+     */
+    @GetMapping("/planinfo/edit/trainResult")
+    public Map<String, Object> getTrainResultList(ServletRequest request,
+                                                  String planId,
+                                                  String forecastTimeStart,
+                                                  String forecastSection,
+                                                  String forecastTime) {
+
+        //创建集合来接受数据库数据
+        List<TrainResult> trainResultList = new ArrayList<TrainResult>();
+        //存放数组
+        Map<String, Object> dataMap = Maps.newHashMap();
+
+        EntityWrapper<TrainResult> trainResultEntityWrapper = new EntityWrapper<>();
+        trainResultEntityWrapper.eq("plan_id", planId);
+        trainResultEntityWrapper.eq("forecast_section", forecastSection);
+        trainResultEntityWrapper.eq("forecast_time_start", forecastTimeStart);
+        trainResultEntityWrapper.like("forecast_time", forecastTime);
+
+        trainResultList = trainResultService.selectList(trainResultEntityWrapper);
+        logger.info("======trainResultList22=====" + trainResultList);
+        logger.info("======trainResultList22size=====" + trainResultList.size());
+        //创建装载年份的数组
+        String[] yearArr = new String[trainResultList.size()];
+
+        //创建装载实测值的数组
+        Double[] measuredValueArr = new Double[trainResultList.size()];
+        //创建装载率定值的数组
+        Double[] trainResultValueArr = new Double[trainResultList.size()];
+        //定义数组下标
+        int i = 0;
+        for (TrainResult trainResult : trainResultList) {
+            yearArr[i] = trainResult.getYearNo();
+            measuredValueArr[i] = trainResult.getMeasuredValue();
+            trainResultValueArr[i] = trainResult.getTrainResultValue();
+            i++;
+        }
+        //将数组放入集合
+        dataMap.put("yearArr", yearArr);
+        dataMap.put("measuredValueArr", measuredValueArr);
+        dataMap.put("trainResultValueArr", trainResultValueArr);
+        logger.info("train====--===" + dataMap.toString());
+        return dataMap;
+    }
+
+    /**
+     * 用于展示 验证结果图
+     *
+     * @param request
+     * @param planId
+     * @param forecastTimeStart
+     * @param forecastSection
+     * @param forecastTime
+     * @return
+     */
+    @GetMapping("/planinfo/edit/testResult")
+    public Map<String, Object> getTestResultList(ServletRequest request,
+                                                 String planId,
+                                                 String forecastTimeStart,
+                                                 String forecastSection,
+                                                 String forecastTime) {
+
+        List<TestResult> testResultList = new ArrayList<>();
+        Map<String, Object> dataMap = Maps.newHashMap();
+        EntityWrapper<TestResult> testResultEntityWrapper = new EntityWrapper<>();
+        testResultEntityWrapper.eq("plan_id", planId);
+        testResultEntityWrapper.eq("forecast_section", forecastSection);
+        testResultEntityWrapper.eq("forecast_time_start", forecastTimeStart);
+        testResultEntityWrapper.like("forecast_time", forecastTime);
+
+
+        testResultList = testResultService.selectList(testResultEntityWrapper);
+
+        //创建装载年份的数组
+        String[] yearArr = new String[testResultList.size()];
+
+        //创建装载实测值的数组
+        Double[] measuredValueArr = new Double[testResultList.size()];
+        //创建装载率定值的数组
+        Double[] testResultValueArr = new Double[testResultList.size()];
+
+        //定义数组下标
+        int i = 0;
+        for (TestResult testResult : testResultList) {
+            yearArr[i] = testResult.getYearNo();
+            measuredValueArr[i] = testResult.getMeasuredValue();
+            testResultValueArr[i] = testResult.getTestResultValue();
+            i++;
+        }
+        //将数组放入集合
+        dataMap.put("yearArr", yearArr);
+        dataMap.put("measuredValueArr", measuredValueArr);
+        dataMap.put("testResultValueArr", testResultValueArr);
+        logger.info("test====--===" + dataMap.toString());
+        return dataMap;
+
+    }
+
+}

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>单模型方案详情（预报因子+率定与验证）</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" th:href="@{/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all"/>
+    <!--阿里icon class库,通过icon-text等类设置图标-->
+    <link rel="stylesheet" th:href="@{//at.alicdn.com/t/font_tnyc012u2rlwstt9.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/common/css/main.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/common/css/user.css}" media="all"/>
+</head>
+<body class="childrenBody">
+<fieldset class="layui-elem-field">
+    <legend>月份检索</span></legend>
+    <div class="layui-field-box">
+        <form class="layui-form">
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">预报时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="s_forecastTime" placeholder="请选择预报时间" class="layui-input"
+                               id="forecast_time">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <a class="layui-btn" lay-submit="" lay-filter="searchForm" id="aaa">查询</a>
+            </div>
+        </form>
+    </div>
+</fieldset>
+<div class="layui-form users_list">
+    <blockquote class="layui-elem-quote title">预报因子</blockquote>
+    <table class="layui-table" id="test" lay-filter="demo" style="margin-top: 0;"></table>
+</div>
+
+<div class="layui-form users_list">
+    <blockquote class="layui-elem-quote title">率定结果</blockquote>
+    <div id="train_result" style="height: 500px;width: 800px;overflow:hidden auto;margin-left: 20px"></div>
+</div>
+<div class="layui-form users_list">
+    <blockquote class="layui-elem-quote title">率定结果</blockquote>
+    <div id="test_result" style="height: 500px;width: 800px;overflow:hidden auto;margin-left: 20px"></div>
+</div>
+
+<div id="page"></div>
+<div id='jsonContainer' class="Canvas" style="display: none"></div>
+<script type="text/javascript" th:src="@{/lib/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/common/js/tools.js}"></script>
+<script type="text/javascript" th:src="@{/common/js/echarts.min.js}"></script>
+
+<script th:inline="javascript">
+    var planId = [[${planId}]];
+    var forecastTimeStart = [[${forecastTimeStart}]];
+    var forecastTimeEnd = [[${forecastTimeEnd}]];
+    var forecastSection = [[${forecastSection}]];
+    layui.use(['layer', 'form', 'table', 'laydate'], function () {
+        var layer = layui.layer,
+            $ = layui.jquery,
+            form = layui.form,
+            laydate = layui.laydate,
+            table = layui.table,
+            t;
+        form.render();
+//        预报时间
+        laydate.render({
+            elem: '#forecast_time' //月份选择
+            , type: 'month'
+            , format: 'yyyy-MM' //可任意组合
+//            , value: forecastTimeStart
+            , min: forecastTimeStart + '-1'
+//            , max: forecastTimeEnd + '-1'
+        });
+//        表格
+        t = {
+            elem: '#test',
+            url: "/plan/planinfo/edit/detail?forecastTimeStart=" + forecastTimeStart +
+            "&forecastSection=" + forecastSection,
+            method: 'get',
+            initSort: {field: 'ccIndex', type: 'desc'},
+            page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
+                //,curr: 5 //设定初始在第 5 页
+                groups: 2, //只显示 1 个连续页码
+                first: "首页", //显示首页
+                last: "尾页", //显示尾页
+                limits: [5, 10, 15],
+                limit: 15
+            },
+//            width: $(parent.window).width() - 20,
+            cols: [
+                [
+                    {fixed: 'left', field: 'id', title: '序号', width: '5%', sort: true},
+                    {field: 'forecastTime', title: '预报时间'},
+                    {field: 'yearNo', title: '因子年份'},
+                    {field: 'monthNo', title: '因子月份'},
+                    {field: 'climateIndexNo', title: '因子编号', sort: true},
+                    {field: 'climateIndexName', title: '因子名称'},
+                    {field: 'climateIndexValue', title: '因子值'},
+                    {field: 'ccIndex', title: '相关系数', sort: true},
+                ]
+            ]
+        };
+        table.render(t);
+
+        var colors = ['#0c1efd', '#fd6134', '#c916f2'];
+        //率定结果图
+        var myChart_train = echarts.init(document.getElementById("train_result"), 'macarons');
+        myChart_train.setOption({
+            color: colors,
+            title: {
+                text: forecastSection+'——率定结果图',
+                left: 'center',
+                top: '15px'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+
+            toolbox: { //可视化的工具箱
+                show: true,
+                feature: {
+                    dataView: { //数据视图
+                        show: true,
+                        title: '数据视图',
+                        readOnly: false,
+                        optionToContent: function (opt) {
+                            var axisData = opt.xAxis[0].data;
+                            var series = opt.series;
+                            var tableTitle = "模型预报结果";
+                            var table = '<div style="position:absolute;top: 5px;left: 0px;right: 0px;line-height: 1.4em;text-align:center;font-size:14px;">'
+                                + tableTitle + '</div>'
+                                + '<table id="test" class="table-bordered table-striped" style="width:100%;text-align:center">'
+                                + '<tbody><tr>'
+                                + '<td>年份</td>'
+                                + '<td>' + series[0].name + '</td>'
+                                + '<td>' + series[1].name + '</td>'
+                                + '</tr>';
+                            for (var i = 0, l = axisData.length; i < l; i++) {
+                                table += '<tr>'
+                                    + '<td>' + axisData[i] + '</td>'
+                                    + '<td>' + series[0].data[i] + '</td>'
+                                    + '<td>' + series[1].data[i] + '</td>'
+                                    + '</tr>';
+                            }
+                            table += '</tbody>';
+                            return table;
+                        }
+                    },
+                    restore: { //重置
+                        show: true
+                    },
+                    saveAsImage: {//保存图片
+                        show: true
+                    }
+                }
+            },
+            legend: {
+                data: ['实测值', '率定值'],
+                orient: 'vertical',//垂直显示，默认水平horizontal
+                top: 'middle',    //延Y轴居中
+                left: 'right', //居右显示
+                align: 'left'//图标左对齐
+            },
+            xAxis: [
+                {
+                    name: '时间',
+                    type: 'category',
+                    data: [],
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    name: '径流量（m^3/s）',
+                    type: 'value',
+                    min: 0,
+                    axisLabel: {
+                        formatter: '{value} '
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '实测值',
+                    type: 'bar',
+                    data: []
+                },
+                {
+                    name: '率定值',
+                    type: 'line',
+                    data: []
+                }
+            ]
+        });
+        //验证结果图
+        var myChart_test = echarts.init(document.getElementById("test_result"), 'macarons');
+        myChart_test.setOption({
+            color: colors,
+            title: {
+                text: forecastSection+'——验证结果图',
+                left: 'center',
+                top: '15px'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            toolbox: { //可视化的工具箱
+                show: true,
+                feature: {
+                    dataView: { //数据视图
+                        show: true,
+                        title: '数据视图',
+                        readOnly: false,
+                        optionToContent: function (opt) {
+                            var axisData = opt.xAxis[0].data;
+                            var series = opt.series;
+                            var tableTitle = "模型预报结果";
+                            var table = '<div style="position:absolute;top: 5px;left: 0px;right: 0px;line-height: 1.4em;text-align:center;font-size:14px;">'
+                                + tableTitle + '</div>'
+                                + '<table id="test" class="table-bordered table-striped" style="width:100%;text-align:center">'
+                                + '<tbody><tr>'
+                                + '<td>年份</td>'
+                                + '<td>' + series[0].name + '</td>'
+                                + '<td>' + series[1].name + '</td>'
+                                + '</tr>';
+                            for (var i = 0, l = axisData.length; i < l; i++) {
+                                table += '<tr>'
+                                    + '<td>' + axisData[i] + '</td>'
+                                    + '<td>' + series[0].data[i] + '</td>'
+                                    + '<td>' + series[1].data[i] + '</td>'
+                                    + '</tr>';
+                            }
+                            table += '</tbody>';
+                            return table;
+                        }
+                    },
+                    restore: { //重置
+                        show: true
+                    },
+                    saveAsImage: {//保存图片
+                        show: true
+                    }
+                }
+            },
+
+            legend: {
+                data: ['实测值', '验证值'],
+                orient: 'vertical',//垂直显示，默认水平horizontal
+                top: 'middle',    //延Y轴居中
+                left: 'right', //居右显示
+                align: 'left'//图标左对齐
+            },
+            xAxis: [
+                {
+                    name: '时间',
+                    type: 'category',
+                    data: [],
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    name: '径流量（m^3/s）',
+                    type: 'value',
+                    min: 0,
+                    axisLabel: {
+                        formatter: '{value} '
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '实测值',
+                    type: 'bar',
+                    data: []
+                },
+                {
+                    name: '验证值',
+                    type: 'line',
+                    data: []
+                }
+            ]
+        });
+
+
+        //为图赋值
+        function getJson(forecastTime) {
+            $.get("/plan/planinfo/edit/trainResult?planId=" + planId
+                + "&forecastTimeStart=" + forecastTimeStart
+                + "&forecastSection=" + forecastSection
+                + "&forecastTime=" + forecastTime
+                , {}
+                , function (res) {
+                    myChart_train.setOption({
+                        xAxis: [
+                            {
+                                data: res.yearArr
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '实测值',
+                                data: res.measuredValueArr
+                            }, {
+                                name: '率定值',
+                                data: res.trainResultValueArr
+                            }
+                        ]
+                    })
+
+                }, "json"
+            );
+
+            $.get("/plan/planinfo/edit/testResult?planId=" + planId
+                + "&forecastTimeStart=" + forecastTimeStart
+                + "&forecastSection=" + forecastSection
+                + "&forecastTime=" + forecastTime
+                , {}
+                , function (res) {
+//                var b = $.isEmptyObject(res);
+//                alert(b);//true
+                    myChart_test.setOption({
+                        xAxis: [
+                            {
+                                data: res.yearArr
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '实测值',
+                                data: res.measuredValueArr
+                            }, {
+                                name: '验证值',
+                                data: res.testResultValueArr
+                            }
+                        ]
+                    })
+
+                }, "json"
+            );
+        }
+
+        //搜索
+        form.on("submit(searchForm)", function (data) {
+            t.where = data.field;
+            table.reload('test', t);
+            var forecastTime = $('#forecast_time').val();
+            getJson(forecastTime);
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

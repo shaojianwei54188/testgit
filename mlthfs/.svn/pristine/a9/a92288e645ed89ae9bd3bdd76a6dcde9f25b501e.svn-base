@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+执行模型综合
+<br>
+对单模型方案（包括校正的还有没有校正的在内）
+<br>
+一张表的形式展示，选中几个模型之后点击执行，完成之后提示查看综合后的结果
+</body>
+</html>

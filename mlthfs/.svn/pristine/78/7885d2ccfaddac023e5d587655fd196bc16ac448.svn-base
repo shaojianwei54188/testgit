@@ -1,0 +1,22 @@
+package com.hhu.mlthfs.controller.forecast;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+/**
+ * 作业预报执行  控制层
+ *
+ */
+@RestController
+@RequestMapping("/forecast")
+public class DoForecastController {
+
+    @GetMapping("/doForecastPage")
+    public ModelAndView doForecastPageIndex(){
+
+        ModelAndView mav=new ModelAndView("page/forecast/DoForecast/doForecastPage");
+        return mav;
+    }
+}

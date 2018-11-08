@@ -1,0 +1,20 @@
+package com.hhu.mlthfs.service.impl;
+
+import com.hhu.mlthfs.model.PlanAssessIndex;
+import com.hhu.mlthfs.mapper.PlanAssessIndexDao;
+import com.hhu.mlthfs.service.PlanAssessIndexService;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
+
+/**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author HHU
+ * @since 2018-10-15
+ */
+@Service
+public class PlanAssessIndexServiceImpl extends ServiceImpl<PlanAssessIndexDao, PlanAssessIndex> implements PlanAssessIndexService {
+	
+}

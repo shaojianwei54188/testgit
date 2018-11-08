@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" style="height:100%;">
+<head>
+    <meta charset="utf-8">
+    <title>首页地图</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" th:href="@{/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all"/>
+    <!--阿里icon class库,通过icon-text等类设置图标-->
+    <link rel="stylesheet" th:href="@{//at.alicdn.com/t/font_tnyc012u2rlwstt9.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/common/css/main.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/common/css/user.css}" media="all"/>
+    <!--<script type="text/javascript" th:src="@{/common/js/china.js}"></script>-->
+    <script type="text/javascript" th:src="@{/common/js/echarts.min.js}"></script>
+    <script type="text/javascript" th:src="@{/common/js/jquery.min.js}"></script>
+</head>
+<body style="height:100%;width: 100%;">
+<div id="main" style="width:100%;height:100%;"></div>
+<script>
+    var myChart = echarts.init(document.getElementById("main"));
+
+    var zhongguo = "/common/json/map/data-china.json";
+    var hainan = "/common/json/map/data-hainan.json";
+    var xizang = "/common/json/map/data-xizang.json";
+    var zhejiang = "/common/json/map/data-zhejiang.json";
+    var yunnan = "/common/json/map/data-yunnan.json";
+    var xinjiang = "/common/json/map/data-xinjiang.json";
+    var tianjin = "/common/json/map/data-tianjin.json";
+    var sichuan = "/common/json/map/data-sichuan.json";
+    var shanxi = "/common/json/map/data-shanxi.json";
+    var shangxi = "/common/json/map/data-shangxi.json";
+    var shanghai = "/common/json/map/data-shanghai.json";
+    var shangdong = "/common/json/map/data-shangdong.json";
+    var qinghai = "/common/json/map/data-qinghai.json";
+    var ningxia = "/common/json/map/data-ningxia.json";
+    var neimenggu = "/common/json/map/data-neimenggu.json";
+    var liaoning = "/common/json/map/data-liaoning.json";
+    var jilin = "/common/json/map/data-jilin.json";
+    var jiangxi = "/common/json/map/data-jiangxi.json";
+    var jiangsu = "/common/json/map/data-jiangsu.json";
+    var hunan = "/common/json/map/data-hunan.json";
+    var hubei = "/common/json/map/data-hubei.json";
+    var henan = "/common/json/map/data-henan.json";
+    var heilongjiang = "/common/json/map/data-heilongjiang.json";
+    var hebei = "/common/json/map/data-hebei.json";
+    var guizhou = "/common/json/map/data-guizhou.json";
+    var guangxi = "/common/json/map/data-guangxi.json";
+    var guangdong = "/common/json/map/data-guangdong.json";
+    var gansu = "/common/json/map/data-gansu.json";
+    var chongqing = "/common/json/map/data-chongqing.json";
+    var aomen = "/common/json/map/data-aomen.json";
+    var anhui = "/common/json/map/data-anhui.json";
+    var beijing = "/common/json/map/data-beijing.json";
+    var fujian = "/common/json/map/data-fujian.json";
+    var xianggang = "/common/json/map/data-xianggang.json";
+
+    //标题信息样式
+    var name_title = "\n \n "
+    var subname = ''
+    var nameColor = " rgb(55, 75, 113)"
+    var name_fontFamily = '等线'
+    var subname_fontSize = 15
+    var name_fontSize = 18
+
+    //各省份的地图json文件
+    var provinces = {
+        '上海': shanghai,
+        '河北': hebei,
+        '山西': shangxi,
+        '内蒙古': neimenggu,
+        '辽宁': liaoning,
+        '吉林': jilin,
+        '黑龙江': heilongjiang,
+        '江苏': jiangsu,
+        '浙江': zhejiang,
+        '安徽': anhui,
+        '福建': fujian,
+        '江西': jiangxi,
+        '山东': shangdong,
+        '河南': henan,
+        '湖北': hubei,
+        '湖南': hunan,
+        '广东': guangdong,
+        '广西': guangxi,
+        '海南': hainan,
+        '四川': sichuan,
+        '贵州': guizhou,
+        '云南': yunnan,
+        '西藏': xizang,
+        '陕西': shanxi,
+        '甘肃': gansu,
+        '青海': qinghai,
+        '宁夏': ningxia,
+        '新疆': xinjiang,
+        '北京': beijing,
+        '天津': tianjin,
+        '重庆': chongqing,
+        '香港': xianggang,
+        '澳门': aomen,
+    };
+
+    //各省份的数据
+    var allData = [
+        {
+            name: '北京'
+        }, {
+            name: '天津'
+        }, {
+            name: '上海'
+        }, {
+            name: '重庆'
+        }, {
+            name: '河北'
+        }, {
+            name: '河南'
+        }, {
+            name: '云南'
+        }, {
+            name: '辽宁'
+        }, {
+            name: '黑龙江'
+        }, {
+            name: '湖南'
+        }, {
+            name: '安徽'
+        }, {
+            name: '山东'
+        }, {
+            name: '新疆'
+        }, {
+            name: '江苏'
+        }, {
+            name: '浙江'
+        }, {
+            name: '江西'
+        }, {
+            name: '湖北'
+        }, {
+            name: '广西'
+        }, {
+            name: '甘肃'
+        }, {
+            name: '山西'
+        }, {
+            name: '内蒙古'
+        }, {
+            name: '陕西'
+        }, {
+            name: '吉林'
+        }, {
+            name: '福建'
+        }, {
+            name: '贵州'
+        }, {
+            name: '广东'
+        }, {
+            name: '青海'
+        }, {
+            name: '西藏'
+        }, {
+            name: '四川'
+        }, {
+            name: '宁夏'
+        }, {
+            name: '海南'
+        }, {
+            name: '台湾'
+        }, {
+            name: '香港'
+        }, {
+            name: '澳门'
+        }];
+    //随机数赋值
+    for (var i = 0; i < allData.length; i++) {
+        allData[i].value = Math.round(Math.random() * 100);
+    }
+
+    loadMap(zhongguo, 'china');//初始化全国地图
+
+    var timeFn = null;
+
+    //单击切换到省级地图，当mapCode有值,说明可以切换到下级地图
+    myChart.on('click', function (params) {
+        clearTimeout(timeFn);
+        //由于单击事件和双击事件冲突，故单击的响应事件延迟250毫秒执行
+        timeFn = setTimeout(function () {
+            var name = params.name; //地区name
+            var mapCode = provinces[name]; //地区的json数据
+            if (!mapCode) {
+                alert('无此区域地图显示');
+                return;
+            }
+            loadMap(mapCode, name);
+
+        }, 250);
+    });
+
+
+    // 绑定双击事件，返回全国地图
+    myChart.on('dblclick', function (params) {
+        //当双击事件发生时，清除单击事件，仅响应双击事件
+        clearTimeout(timeFn);
+
+        //返回全国地图
+        loadMap(zhongguo, 'china');
+    });
+
+    /**
+     获取对应的json地图数据，然后向echarts注册该区域的地图，最后加载地图信息
+     @params {String} mapCode:json数据的地址
+     @params {String} name: 地图名称
+     */
+    function loadMap(mapCode, name) {
+        $.get(mapCode, function (data) {
+            if (data) {
+                echarts.registerMap(name, data);
+                var option = {
+                    //标题
+                    title: {
+                        text: name_title,
+                        subtext: subname,
+                        x: 'center',
+                        textStyle: {
+                            color: nameColor,
+                            fontFamily: name_fontFamily,
+                            fontSize: name_fontSize
+                        },
+                        subtextStyle:{
+                            fontSize:subname_fontSize,
+                            fontFamily:name_fontFamily
+                        }
+                    },
+                    tooltip: {
+                        show: true,
+                        formatter: function (params) {
+                            if (params.data) return params.name + '：' + params.data['value']
+                        },
+                    },
+                    //左下角图例
+                    visualMap: {
+                        type: 'continuous',//连续型
+                        showLabel: true,
+                        left: '50',
+                        min: 0,
+                        max: 100,
+                        text: ['高', '低'], // 文本，默认为数值文本
+                        calculable: true,
+                        inRange: {
+                            // color: ['#3B5077', '#031525'] // 蓝黑
+                            // color: ['#ffc0cb', '#800080'] // 红紫
+                            // color: ['#3C3B3F', '#605C3C'] // 黑绿
+                            // color: ['#0f0c29', '#302b63', '#24243e'] // 黑紫黑
+                            // color: ['#23074d', '#cc5333'] // 紫红
+                            // color: ['#1488CC', '#2B32B2'] // 浅蓝
+                            // color: ['#00467F', '#A5CC82'] // 蓝绿
+                            // color: ['#00467F', '#A5CC82'] // 蓝绿
+                            // color: ['#00467F', '#A5CC82'] // 蓝绿
+                            // color: ['#00467F', '#A5CC82'] // 蓝绿
+//                            color: ['#00467F', '#A5CC82'] // 蓝绿
+                            color: ['#edfbfb', '#b7d6f3', '#40a9ed', '#3598c1', '#215096', ]
+                        },
+                        splitNumber: 0
+                    },
+                    /*右侧工具按钮组*/
+//                     toolbox: {
+//                         show: true,
+//                         orient: 'vertical',
+//                         left: 'right',
+//                         top: 'center',
+//                         feature: {
+//                             dataView: {
+//                                 readOnly: false
+//                             },
+//                             restore: {},
+//                             saveAsImage: {}
+//                         }
+//                     },
+
+//                     legend: {
+//                         orient: 'vertical',
+//                         y: 'bottom',
+//                         x: 'right',
+//                         data: ['credit_pm2.5'],
+//                         textStyle: {
+//                             color: '#fff'
+//                         }
+//                     },
+
+                    geo: {
+                        show: true,
+                        map: zhongguo ,
+                        label: {
+                            normal: {
+                                show: false
+                            },
+                            emphasis: {
+                                show: false,
+                            }
+                        },
+                        roam: true,
+                        itemStyle: {
+                            normal: {
+                                areaColor: '#031525',
+                                borderColor: '#3B5077',
+                            },
+                            emphasis: {
+                                areaColor: '#2B91B7',
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                        name: 'MAP',
+                        type: 'map',
+                        mapType: name,
+                        selectedMode: 'false',//是否允许选中多个区域
+                        label: {
+                            normal: {
+                                show: true
+                            },
+                            emphasis: {
+                                show: true
+                            }
+                        },
+                        data: allData
+                    }]
+                };
+                myChart.setOption(option);
+                // curMap = {
+                //     mapCode: mapCode,
+                //     mapName: name
+                // };
+            } else {
+                alert('无法加载该地图');
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+package com.hhu.mlthfs.controller.plan.planassess;
+
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.hhu.mlthfs.base.BaseController;
+import com.hhu.mlthfs.model.PlanInfo;
+import com.hhu.mlthfs.utils.LayerData;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
+
+import javax.servlet.ServletRequest;
+import java.util.Map;
+
+/**
+ * 方案详情界面planinfoPage 控制层
+ *
+ */
+@RestController
+@RequestMapping("/plan")
+public class PlanInfoController extends BaseController {
+
+    public static final Logger logger= LoggerFactory.getLogger(PlanInfoController.class);
+    /**
+     * 进入系统 方案详情界面。
+     * @return
+     */
+    @GetMapping("/planinfoPage")
+    public ModelAndView planinfoIndex(){
+        ModelAndView mav=new ModelAndView("page/plan/planinfo/planinfoPage");
+        return mav;
+    }
+    /**
+     * 获取方案信息，用于展示在方案详情界面。
+     *
+     */
+    @GetMapping("/planinfo")
+    public LayerData<PlanInfo> list(@RequestParam(value = "page",defaultValue = "1") Integer page,
+                                    @RequestParam(value = "limit",defaultValue = "10") Integer limit,
+                                    ServletRequest request){
+        Map map= WebUtils.getParametersStartingWith(request,"s_");
+        LayerData<PlanInfo> planInfoLayerData=new LayerData<>();
+        EntityWrapper<PlanInfo> planInfoEntityWrapper=new EntityWrapper<>();
+        planInfoEntityWrapper.eq("del_flag",false);
+        planInfoEntityWrapper.like("plan_type","0");//单模型方案
+        if(!map.isEmpty()){
+            String keys= (String) map.get("key");
+            if(StringUtils.isNotBlank(keys)){
+                planInfoEntityWrapper.like("forecast_section",keys);
+            }else {
+                map.remove("key");
+            }
+//             起报时间
+            String forecastTimeStart=(String)map.get("forecastTimeStart");
+            if(StringUtils.isNotBlank(forecastTimeStart)){
+                planInfoEntityWrapper.like("forecast_time_start",forecastTimeStart);
+            }else{
+                map.remove("forecastTimeStart");
+            }
+
+        }
+        Page<PlanInfo> planInfoPage=planInfoService.selectPage(new Page<>(page,limit),planInfoEntityWrapper);
+        planInfoLayerData.setCount(planInfoPage.getTotal());
+        planInfoLayerData.setData(planInfoPage.getRecords());
+        logger.info(planInfoLayerData.toString());
+        return planInfoLayerData;
+    }
+
+    @GetMapping("/planinfo/edit")
+    public  ModelAndView edit(Long id){
+        logger.info("id=="+id);
+        Long id11=id;
+        ModelAndView mav=new ModelAndView("page/plan/planinfo/edit");
+        logger.info("==========id11========="+id11);
+        return mav;
+    }
+
+}

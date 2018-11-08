@@ -1,0 +1,290 @@
+package com.hhu.mlthfs.model;
+
+import java.io.Serializable;
+
+import java.util.Date;
+import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.KeySequence;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+/**
+ * <p>
+ * 
+ * </p>
+ *
+ * @author HHU
+ * @since 2018-10-01
+ */
+@TableName("FORECAST_RESULT")
+@KeySequence(value = "forecast_result_sq")
+public class ForecastResult extends Model<ForecastResult> {
+
+    private static final long serialVersionUID = 1L;
+
+	private Long id;
+    /**
+     * 起报时间
+     */
+	private String forecastTimeStart;
+    /**
+     * 预报断面
+     */
+	private String forecastSection;
+    /**
+     * 预报时间
+     */
+	private String forecastTime;
+    /**
+     * 方案编号
+     */
+	private String planId;
+    /**
+     * 方案类型（0：单模型，1：多模型）
+     */
+	private Integer planType;
+    /**
+     * 单模型预报结果值
+     */
+	private Double forecastValue;
+    /**
+     * 单模型校正结果
+     */
+    private Double forecastAdjustValue;
+    /**
+     * 实测值
+     */
+	private Double measuredValue;
+    /**
+     * 历史均值
+     */
+	private Double historyAverage;
+    /**
+     * 预报距平
+     */
+	private Double forecastDeparture;
+    /**
+     * 预报等级
+     */
+	private String forecastLevel;
+    /**
+     * 50%值
+     */
+	private Double forecastQ50Value;
+    /**
+     * 5%值
+     */
+	private Double forecastQ5Value;
+    /**
+     * 95%值
+     */
+	private Double forecastQ95Value;
+	private Long createBy;
+	private Date createDate;
+	private Long updateBy;
+	private Date updateDate;
+	private Integer delFlag;
+	private String remarks;
+
+
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getForecastTimeStart() {
+		return forecastTimeStart;
+	}
+
+	public void setForecastTimeStart(String forecastTimeStart) {
+		this.forecastTimeStart = forecastTimeStart;
+	}
+
+	public String getForecastSection() {
+		return forecastSection;
+	}
+
+	public void setForecastSection(String forecastSection) {
+		this.forecastSection = forecastSection;
+	}
+
+	public String getForecastTime() {
+		return forecastTime;
+	}
+
+	public void setForecastTime(String forecastTime) {
+		this.forecastTime = forecastTime;
+	}
+
+	public String getPlanId() {
+		return planId;
+	}
+
+	public void setPlanId(String planId) {
+		this.planId = planId;
+	}
+
+	public Integer getPlanType() {
+		return planType;
+	}
+
+	public void setPlanType(Integer planType) {
+		this.planType = planType;
+	}
+
+	public Double getForecastValue() {
+		return forecastValue;
+	}
+
+	public void setForecastValue(Double forecastValue) {
+		this.forecastValue = forecastValue;
+	}
+
+	public Double getMeasuredValue() {
+		return measuredValue;
+	}
+
+	public void setMeasuredValue(Double measuredValue) {
+		this.measuredValue = measuredValue;
+	}
+
+	public Double getHistoryAverage() {
+		return historyAverage;
+	}
+
+	public void setHistoryAverage(Double historyAverage) {
+		this.historyAverage = historyAverage;
+	}
+
+	public Double getForecastDeparture() {
+		return forecastDeparture;
+	}
+
+	public void setForecastDeparture(Double forecastDeparture) {
+		this.forecastDeparture = forecastDeparture;
+	}
+
+	public String getForecastLevel() {
+		return forecastLevel;
+	}
+
+	public void setForecastLevel(String forecastLevel) {
+		this.forecastLevel = forecastLevel;
+	}
+
+	public Double getForecastQ50Value() {
+		return forecastQ50Value;
+	}
+
+	public void setForecastQ50Value(Double forecastQ50Value) {
+		this.forecastQ50Value = forecastQ50Value;
+	}
+
+	public Double getForecastQ5Value() {
+		return forecastQ5Value;
+	}
+
+	public void setForecastQ5Value(Double forecastQ5Value) {
+		this.forecastQ5Value = forecastQ5Value;
+	}
+
+	public Double getForecastQ95Value() {
+		return forecastQ95Value;
+	}
+
+	public void setForecastQ95Value(Double forecastQ95Value) {
+		this.forecastQ95Value = forecastQ95Value;
+	}
+
+	public Long getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(Long createBy) {
+		this.createBy = createBy;
+	}
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Long getUpdateBy() {
+		return updateBy;
+	}
+
+	public void setUpdateBy(Long updateBy) {
+		this.updateBy = updateBy;
+	}
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	public Integer getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(Integer delFlag) {
+		this.delFlag = delFlag;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public Double getForecastAdjustValue() {
+		return forecastAdjustValue;
+	}
+
+	public void setForecastAdjustValue(Double forecastAdjustValue) {
+		this.forecastAdjustValue = forecastAdjustValue;
+	}
+
+	@Override
+	protected Serializable pkVal() {
+		return this.id;
+	}
+
+	@Override
+	public String toString() {
+		return "ForecastResult{" +
+			", id=" + id +
+			", forecastTimeStart=" + forecastTimeStart +
+			", forecastSection=" + forecastSection +
+			", forecastTime=" + forecastTime +
+			", planId=" + planId +
+			", planType=" + planType +
+			", forecastValue=" + forecastValue +
+			", measuredValue=" + measuredValue +
+			", historyAverage=" + historyAverage +
+			", forecastDeparture=" + forecastDeparture +
+			", forecastLevel=" + forecastLevel +
+			", forecastQ50Value=" + forecastQ50Value +
+			", forecastQ5Value=" + forecastQ5Value +
+			", forecastQ95Value=" + forecastQ95Value +
+			", createBy=" + createBy +
+			", createDate=" + createDate +
+			", updateBy=" + updateBy +
+			", updateDate=" + updateDate +
+			", delFlag=" + delFlag +
+			", remarks=" + remarks +
+			", forecastAdjustValue=" + forecastAdjustValue +
+			"}";
+	}
+}

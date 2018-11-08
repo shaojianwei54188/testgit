@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>预报结果</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" th:href="@{/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all"/>
+    <!--阿里icon class库,通过icon-text等类设置图标-->
+    <link rel="stylesheet" th:href="@{//at.alicdn.com/t/font_tnyc012u2rlwstt9.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/common/css/main.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/common/css/user.css}" media="all"/>
+</head>
+<body class="childrenBody">
+
+
+<div class="layui-form users_list">
+    <blockquote class="layui-elem-quote title"><span th:text="${forecastSection}"></span>&nbsp;&nbsp;（<span
+            th:text="${forecastTime}"></span>）&nbsp;&nbsp;发布结果
+    </blockquote>
+    <div class="layui-row">
+        <div class="layui-col-xs6">
+            <div class="grid-demo grid-demo-bg1" id="forecast_result"
+                 style="height: 500px;width: 90%;overflow:hidden auto;margin-left: 20px">6/12
+            </div>
+        </div>
+        <div class="layui-col-xs6">
+            <blockquote class="layui-elem-quote title">发布结果信息</blockquote>
+            <table class="layui-table">
+                <colgroup>
+                    <col width="150">
+                    <col>
+                </colgroup>
+                <tbody>
+                <tr>
+                    <td>预报断面</td>
+                    <td th:text="${forecastSection}"></td>
+                </tr>
+                <tr>
+                    <td >起报时间</td>
+                    <td th:text="${forecastTimeStart}"></td>
+                </tr>
+                <tr>
+                    <td >预报时间</td>
+                    <td th:text="${forecastTime}"></td>
+                </tr>
+                <tr>
+                    <td>预报流量&nbsp;（m<sup>3</sup>/s）</td>
+                    <td th:text="${forecastValue}"></td>
+                </tr>
+                <tr>
+                    <td>发布方式</td>
+                    <td th:text="${releaseType}==0?'自动发布'+ '（'+${modelName}+'）':'手动发布'"></td>
+                </tr>
+                <tr>
+                    <td>发布人</td>
+                    <td th:text="${releasePerson}"></td>
+                </tr>
+                <tr>
+                    <td>发布时间</td>
+                    <td th:text="${releaseTime}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="page"></div>
+<div id='jsonContainer' class="Canvas" style="display: none"></div>
+<script type="text/javascript" th:src="@{/lib/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/common/js/tools.js}"></script>
+<script type="text/javascript" th:src="@{/common/js/echarts.min.js}"></script>
+<script th:inline="javascript">
+    //
+    <!--获取来自父界面的参数,用于确定图形的内容参数-->
+    var forecastTimeStart = [[${forecastTimeStart}]];
+    var forecastSection = [[${forecastSection}]];
+    var forecastTime = [[${forecastTime}]];
+    var forecastValue = [[${forecastValue}]];
+
+    layui.use(['layer', 'form', 'table', 'laydate'], function () {
+        var layer = layui.layer,
+            $ = layui.jquery
+        ;
+        var colors = ['#0c1efd', '#fd6134', '#c916f2'];
+        //图
+        var myChart_forecastResult = echarts.init(document.getElementById("forecast_result"), 'macarons');
+        myChart_forecastResult.setOption({
+            color: colors,
+            title: {
+                text: '发布结果',
+                left: 'center',
+                top: '15px'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+
+            toolbox: { //可视化的工具箱
+                show: true,
+                feature: {
+                    dataView: { //数据视图
+                        show: true,
+//                        title: '数据视图',
+                        readOnly: false,
+                        optionToContent: function (opt) {
+                            var axisData = opt.xAxis[0].data;
+                            var series = opt.series;
+                            var tableTitle = "模型预报结果";
+                            var table = '<div style="position:absolute;top: 5px;left: 0px;right: 0px;line-height: 1.4em;text-align:center;font-size:14px;">'
+                                + tableTitle + '</div>'
+                                + '<table id="test" class="table-bordered table-striped" style="width:100%;text-align:center;border:1px;solid #060504">'
+                                + '<tbody>'
+                                + '<tr>'
+                                + '<td>时间</td>'
+                                + '<td>' + series[0].name + '</td>'
+                                + '</tr>';
+                            for (var i = 0, l = axisData.length; i < l; i++) {
+                                table += '<tr>'
+                                    + '<td>' + axisData[i] + '</td>'
+                                    + '<td>' + series[0].data[i] + '</td>'
+                                    + '</tr>';
+                            }
+                            table += '</tbody>' + '</table>';
+                            return table;
+                        }
+                    },
+                    restore: { //重置
+                        show: true
+                    },
+                    saveAsImage: {//保存图片
+                        show: true
+                    }
+                }
+            },
+            legend: {
+                data: ['径流量'],
+                orient: 'vertical',//垂直显示，默认水平horizontal
+                top: 'middle',    //延Y轴居中
+                left: 'right', //居右显示
+                align: 'left'//图标左对齐
+            },
+            xAxis: [
+                {
+                    name: '时间',
+                    type: 'category',
+                    //保证横坐标的值不会自动省略
+                    axisLabel: {
+                        interval: 1
+                    },
+                    data: [],
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    name: '径流量（m^3/s）',
+                    type: 'value',
+                    min: 0,
+                    axisLabel: {
+                        formatter: '{value} '
+                    }
+                }
+            ],
+            series: [
+
+                {
+                    name: '径流量',
+                    type: 'bar',
+                    data: []
+                }
+
+            ]
+        });
+
+        //为图赋值
+        function getJson() {
+            $.get("/release/getReleaseResult?forecastSection=" + forecastSection
+                + "&forecastTimeStart=" + forecastTimeStart
+                + "&forecastTime=" + forecastTime
+                + "&forecastValue=" + forecastValue
+                , {}
+                , function (res) {
+                    myChart_forecastResult.setOption({
+                        xAxis: [
+                            {
+                                data: [
+                                    res.timeArr[0],
+                                    res.timeArr[1],
+                                    res.timeArr[2],
+                                    res.timeArr[3],
+                                    res.timeArr[4],
+                                    res.timeArr[5],
+                                    res.timeArr[6],
+                                    res.timeArr[7],
+                                    res.timeArr[8],
+                                    res.timeArr[9],
+                                    res.timeArr[10],
+                                    res.timeArr[11],
+                                    res.timeArr[12]
+                                ]
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '径流量',
+                                data: [
+                                    res.historyQArr[0],
+                                    res.historyQArr[1],
+                                    res.historyQArr[2],
+                                    res.historyQArr[3],
+                                    res.historyQArr[4],
+                                    res.historyQArr[5],
+                                    res.historyQArr[6],
+                                    res.historyQArr[7],
+                                    res.historyQArr[8],
+                                    res.historyQArr[9],
+                                    res.historyQArr[10],
+                                    res.historyQArr[11],
+                                    {
+                                        value: res.historyQArr[12],
+                                        itemStyle: {
+                                            color: '#fff',
+                                            borderType: 'dotted',
+                                            borderColor: 'red'
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    })
+
+                }, "json"
+            );
+        }
+
+//        执行函数展示图
+        getJson();
+
+    });
+
+</script>
+
+
+</body>
+</html>

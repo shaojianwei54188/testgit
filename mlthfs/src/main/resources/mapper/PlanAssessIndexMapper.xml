@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.PlanAssessIndexDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.PlanAssessIndex">
+		<id column="ID" property="id" />
+		<result column="PLAN_ID" property="planId" />
+		<result column="FORECAST_SECTION" property="forecastSection" />
+		<result column="FORECAST_TIME_START" property="forecastTimeStart" />
+		<result column="TRAIN10" property="train10" />
+		<result column="TRAIN20" property="train20" />
+		<result column="TRAIN3" property="train3" />
+		<result column="TEST10" property="test10" />
+		<result column="TEST20" property="test20" />
+		<result column="TEST3" property="test3" />
+		<result column="TRAIN5" property="train5" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_DATE" property="updateDate" />
+		<result column="DEL_FLAG" property="delFlag" />
+		<result column="REMARKS" property="remarks" />
+		<result column="MODEL_NAME" property="modelName" />
+		<result column="TEST5" property="test5" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, PLAN_ID, FORECAST_SECTION, FORECAST_TIME_START, TRAIN10, TRAIN20, TRAIN3, TEST10, TEST20, TEST3, TRAIN5, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, DEL_FLAG, REMARKS, MODEL_NAME, TEST5
+    </sql>
+
+</mapper>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>季节性自回归模型（SAP）构建</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" th:href="@{/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/common/css/user.css}" media="all"/>
+</head>
+<style>
+    /*给表头添加背景颜色  todo*/
+    .layui-table-header  tr {
+        background: #82dddd !important;}
+
+    /*#tb1 > layui-table-header > tr{*/
+    /*background: #75D1E1 !important;*/
+    /*}*/
+
+</style>
+<body class="childrenBody">
+<fieldset class="layui-elem-field">
+    <legend>基础参数配置</legend>
+    <div class="layui-field-box">
+        <form class="layui-form">
+            <div class="layui-inline">
+                <label class="layui-form-label">预报断面</label>
+                <div class="layui-input-inline">
+                    <select name="s_section">
+                        <option value=""> 请选择预报断面</option>
+                        <option value="三峡"> 三峡</option>
+                        <option value="丹江口水库"> 丹江口水库</option>
+                        <option value="哈尔滨"> 哈尔滨</option>
+                        <option value="唐乃亥"> 唐乃亥</option>
+                        <option value="梧州"> 梧州</option>
+                        <option value="武宣"> 武宣</option>
+                        <option value="洞庭湖"> 洞庭湖</option>
+                        <option value="潼关"> 潼关</option>
+                        <option value="王家坝"> 王家坝</option>
+                        <option value="鄱阳湖"> 鄱阳湖</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">预报时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="s_forecast_time" class="layui-input" id="forecast_time">
+                    </div>
+                </div>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">资料范围</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="s_time_range" class="layui-input" id="time_range"
+                               placeholder="请选择资料起止年份 ">
+                    </div>
+                </div>
+
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">率定期</label>
+                    <div class="layui-input-inline">
+                        <input type="number" name="s_train" required lay-verify="required"
+                               placeholder="率定期" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label">验证期</label>
+                    <div class="layui-input-inline">
+                        <input type="number" name="s_test" required lay-verify="required"
+                               placeholder="验证期" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</fieldset>
+<fieldset class="layui-elem-field">
+    <legend>因子筛选</legend>
+    <div class="layui-field-box">
+        <form class="layui-form">
+            <div class="layui-inline">
+                <label class="layui-form-label">延伸月数</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="s_month" required disabled lay-verify="required" value="12"
+                           placeholder="延伸月数" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-left: 15px">
+                <a class="layui-btn layui-btn-normal" lay-submit="" lay-filter="searchForm">筛选</a>
+                <a class="layui-btn" data-type="getCheckData" style="visibility: hidden" ></a>
+            </div>
+        </form>
+    </div>
+</fieldset>
+<div class="layui-form users_list" style="float: left;width: 50%">
+    <table class="layui-table" id="tb1"></table>
+</div>
+<div class="layui-form users_list" style="float: right;width: 50%">
+    <table class="layui-table" id="tb2"></table>
+</div>
+<fieldset class="layui-elem-field">
+    <legend>模型校正</legend>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: auto;margin-left: 50px;">误差自回归模型</label>
+            <div class="layui-input-block">
+                <input type="checkbox" style="width: auto" checked="" name="open" lay-skin="switch"
+                       lay-filter="switchTest" lay-text="是|否">
+            </div>
+        </div>
+    </form>
+</fieldset>
+<fieldset class="layui-elem-field">
+    <legend>可靠性评估</legend>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: auto;margin-left: 50px;">水文不确定性处理器（HUP）</label>
+            <div class="layui-input-block">
+                <input type="checkbox" style="width: auto" checked="" name="open" lay-skin="switch"
+                       lay-filter="switchTest" lay-text="是|否">
+            </div>
+        </div>
+    </form>
+</fieldset>
+<fieldset class="layui-elem-field">
+    <legend>提交参数</legend>
+    <form class="layui-form" style="text-align: center">
+        <div class="layui-inline" style="margin-left: 15px">
+            <a class="layui-btn  " lay-submit="" lay-filter="searchForm">创建模型</a>
+        </div>
+    </form>
+</fieldset>
+<script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/common/js/tools.js}"></script>
+<script>
+    layui.use(['layer', 'form', 'table', 'laydate'], function () {
+        var layer = layui.layer,
+            $ = layui.jquery,
+            laydate = layui.laydate,
+            date = new Date(),
+            form = layui.form,
+            table = layui.table,
+            t1,
+            t2;                  //表格数据变量
+        form.render();
+        laydate.render({
+            elem: '#forecast_time'    //月份选择
+            , type: 'month'
+            , format: 'yyyy-MM' //可任意组合
+            , value: new Date(date.getFullYear(), date.getMonth() + 1)
+            , isInitValue: true //是否允许填充初始值，默认为 true
+        });
+        //资料起止年份
+        laydate.render({
+            elem: '#time_range'
+            , type: 'year'
+            , range: true
+        });
+        //筛选因子的表格
+        //全部因子
+        t1 = {
+            elem: '#tb1',
+            url: '/data/wat',//130项气候因子传递接口
+            method: 'get',
+            initSort: {field: 'id', type: 'asc'},
+            page: {
+                //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
+                //,curr: 5 //设定初始在第 5 页
+                groups: 3, //只显示 《1、2、3》  3个连续页码
+                first: "首页", //显示首页
+                last: "尾页", //显示尾页
+                limit: 10,
+                limits: [10, 30, 60, 130]
+            },
+            cols: [
+                [
+                    {title: '全部因子', colspan: '4'}
+                ],
+                [
+                    {type: 'checkbox', fixed: 'left'},
+                    {field: 'id', title: '因子编号', width: '', sort: true},
+                    {field: 'climateNameZhcn', title: '因子名称', width: ''},
+                    {field: 'climateNameEn', title: '相关系数', width: ''}
+                ]
+            ]
+        };
+        //选中的因子
+        t2 = {
+            elem: '#tb2',
+            url: '/data',//130项气候因子传递接口
+            method: 'get',
+            initSort: {field: 'id', type: 'asc'},
+            page: {
+                //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
+                //,curr: 5 //设定初始在第 5 页
+                groups: 3, //只显示 《1、2、3》  3个连续页码
+                first: "首页", //显示首页
+                last: "尾页", //显示尾页
+                limit: 10,
+                limits: [10, 30, 60, 130]
+            },
+            cols: [
+                [
+                    {title: '选中因子', colspan: '5'}
+                ],
+                [
+                    {type: 'checkbox', fixed: 'left'},
+                    {field: 'id', title: '序号', width: '', sort: true},
+                    {field: 'ids', title: '因子编号', width: ''},
+                    {field: 'climateNameZhcn', title: '因子名称', width: ''},
+                    {field: 'climateNameEn', title: '相关系数', width: ''}
+                ]
+            ]
+        };
+        table.render(t1);
+        table.render(t2);
+
+        //监听指定开关-误差自回归校正开关
+        form.on('switch(switchTest)', function (data) {
+            //do sth
+        });
+
+
+    });
+</script>
+</body>
+</html>

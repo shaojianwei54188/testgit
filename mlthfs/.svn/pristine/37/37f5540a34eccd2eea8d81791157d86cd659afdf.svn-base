@@ -1,0 +1,326 @@
+package com.hhu.mlthfs.model;
+
+import java.io.Serializable;
+
+import java.util.Date;
+import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.KeySequence;
+import com.baomidou.mybatisplus.annotations.TableName;
+
+/**
+ * <p>
+ * 
+ * </p>
+ *
+ * @author HHU
+ * @since 2018-10-01
+ */
+@TableName("plan_assess_index")
+@KeySequence(value = "plan_assess_index_sq",clazz = Long.class)
+public class PlanAssessIndex extends Model<PlanAssessIndex> {
+
+    private static final long serialVersionUID = 1L;
+
+	private Long id;
+    /**
+     * 方案编号
+     */
+	private String planId;
+    /**
+     * 预报断面
+     */
+	private String forecastSection;
+    /**
+     * 起报时间（预报出来一年结果中的第一个月）
+     */
+	private String forecastTimeStart;
+    /**
+     * 预报时间
+     */
+	private String forecastTime;
+    /**
+     * 率定期汛期10%变幅误差
+
+     */
+	private Double trainFloodP10;
+    /**
+     * 率定期非汛期10%变幅误差
+
+     */
+	private Double trainNonFloodP10;
+    /**
+     * 率定期全年10%变幅误差
+
+     */
+	private Double trainAllYearP10;
+    /**
+     * 验证期汛期10%变幅误差
+
+     */
+	private Double testFloodP10;
+    /**
+     * 验证期非汛期10%变幅误差
+
+     */
+	private Double testNonFloodP10;
+    /**
+     * 验证期全年10%变幅误差
+
+     */
+	private Double testAllYearP10;
+    /**
+     * 率定期汛期20%变幅误差
+
+     */
+	private Double trainFloodP20;
+    /**
+     * 率定期非汛期20%变幅误差
+
+     */
+	private Double trainNonFloodP20;
+    /**
+     * 率定期全年20%变幅误差
+
+     */
+	private Double trainAllYearP20;
+    /**
+     * 验证期汛期20%变幅误差
+
+     */
+	private Double testFloodP20;
+    /**
+     * 验证期非汛期20%变幅误差
+
+     */
+	private Double testNonFloodP20;
+    /**
+     * 验证期全年20%变幅误差
+
+     */
+	private Double testAllYearP20;
+	private Integer createBy;
+	private Date createDate;
+	private Long updateBy;
+	private Date updateDate;
+	private Integer delFlag;
+	private String remarks;
+
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getPlanId() {
+		return planId;
+	}
+
+	public void setPlanId(String planId) {
+		this.planId = planId;
+	}
+
+	public String getForecastSection() {
+		return forecastSection;
+	}
+
+	public void setForecastSection(String forecastSection) {
+		this.forecastSection = forecastSection;
+	}
+
+	public String getForecastTimeStart() {
+		return forecastTimeStart;
+	}
+
+	public void setForecastTimeStart(String forecastTimeStart) {
+		this.forecastTimeStart = forecastTimeStart;
+	}
+
+	public String getForecastTime() {
+		return forecastTime;
+	}
+
+	public void setForecastTime(String forecastTime) {
+		this.forecastTime = forecastTime;
+	}
+
+	public Double getTrainFloodP10() {
+		return trainFloodP10;
+	}
+
+	public void setTrainFloodP10(Double trainFloodP10) {
+		this.trainFloodP10 = trainFloodP10;
+	}
+
+	public Double getTrainNonFloodP10() {
+		return trainNonFloodP10;
+	}
+
+	public void setTrainNonFloodP10(Double trainNonFloodP10) {
+		this.trainNonFloodP10 = trainNonFloodP10;
+	}
+
+	public Double getTrainAllYearP10() {
+		return trainAllYearP10;
+	}
+
+	public void setTrainAllYearP10(Double trainAllYearP10) {
+		this.trainAllYearP10 = trainAllYearP10;
+	}
+
+	public Double getTestFloodP10() {
+		return testFloodP10;
+	}
+
+	public void setTestFloodP10(Double testFloodP10) {
+		this.testFloodP10 = testFloodP10;
+	}
+
+	public Double getTestNonFloodP10() {
+		return testNonFloodP10;
+	}
+
+	public void setTestNonFloodP10(Double testNonFloodP10) {
+		this.testNonFloodP10 = testNonFloodP10;
+	}
+
+	public Double getTestAllYearP10() {
+		return testAllYearP10;
+	}
+
+	public void setTestAllYearP10(Double testAllYearP10) {
+		this.testAllYearP10 = testAllYearP10;
+	}
+
+	public Double getTrainFloodP20() {
+		return trainFloodP20;
+	}
+
+	public void setTrainFloodP20(Double trainFloodP20) {
+		this.trainFloodP20 = trainFloodP20;
+	}
+
+	public Double getTrainNonFloodP20() {
+		return trainNonFloodP20;
+	}
+
+	public void setTrainNonFloodP20(Double trainNonFloodP20) {
+		this.trainNonFloodP20 = trainNonFloodP20;
+	}
+
+	public Double getTrainAllYearP20() {
+		return trainAllYearP20;
+	}
+
+	public void setTrainAllYearP20(Double trainAllYearP20) {
+		this.trainAllYearP20 = trainAllYearP20;
+	}
+
+	public Double getTestFloodP20() {
+		return testFloodP20;
+	}
+
+	public void setTestFloodP20(Double testFloodP20) {
+		this.testFloodP20 = testFloodP20;
+	}
+
+	public Double getTestNonFloodP20() {
+		return testNonFloodP20;
+	}
+
+	public void setTestNonFloodP20(Double testNonFloodP20) {
+		this.testNonFloodP20 = testNonFloodP20;
+	}
+
+	public Double getTestAllYearP20() {
+		return testAllYearP20;
+	}
+
+	public void setTestAllYearP20(Double testAllYearP20) {
+		this.testAllYearP20 = testAllYearP20;
+	}
+
+	public Integer getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(Integer createBy) {
+		this.createBy = createBy;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Long getUpdateBy() {
+		return updateBy;
+	}
+
+	public void setUpdateBy(Long updateBy) {
+		this.updateBy = updateBy;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	public Integer getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(Integer delFlag) {
+		this.delFlag = delFlag;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	@Override
+	protected Serializable pkVal() {
+		return this.id;
+	}
+
+	@Override
+	public String toString() {
+		return "PlanAssessIndex{" +
+			", id=" + id +
+			", planId=" + planId +
+			", forecastSection=" + forecastSection +
+			", forecastTimeStart=" + forecastTimeStart +
+			", forecastTime=" + forecastTime +
+			", trainFloodP10=" + trainFloodP10 +
+			", trainNonFloodP10=" + trainNonFloodP10 +
+			", trainAllYearP10=" + trainAllYearP10 +
+			", testFloodP10=" + testFloodP10 +
+			", testNonFloodP10=" + testNonFloodP10 +
+			", testAllYearP10=" + testAllYearP10 +
+			", trainFloodP20=" + trainFloodP20 +
+			", trainNonFloodP20=" + trainNonFloodP20 +
+			", trainAllYearP20=" + trainAllYearP20 +
+			", testFloodP20=" + testFloodP20 +
+			", testNonFloodP20=" + testNonFloodP20 +
+			", testAllYearP20=" + testAllYearP20 +
+			", createBy=" + createBy +
+			", createDate=" + createDate +
+			", updateBy=" + updateBy +
+			", updateDate=" + updateDate +
+			", delFlag=" + delFlag +
+			", remarks=" + remarks +
+			"}";
+	}
+}

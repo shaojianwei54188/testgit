@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>单模型方案预报详情</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" th:href="@{/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all"/>
+    <!--阿里icon class库,通过icon-text等类设置图标-->
+    <link rel="stylesheet" th:href="@{//at.alicdn.com/t/font_tnyc012u2rlwstt9.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/common/css/main.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/common/css/user.css}" media="all"/>
+</head>
+<body class="childrenBody">
+<div class="layui-form users_list">
+    <blockquote class="layui-elem-quote title">预报结果</blockquote>
+    <div id="forecast_result" style="height: 500px;width: 800px;overflow:hidden auto;margin-left: 20px"></div>
+</div>
+<div id="page"></div>
+<div id='jsonContainer' class="Canvas" style="display: none"></div>
+<script type="text/javascript" th:src="@{/lib/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/common/js/tools.js}"></script>
+<script type="text/javascript" th:src="@{/common/js/echarts.min.js}"></script>
+<script th:inline="javascript">
+//    <!--获取来自父界面的参数,用于确定图形的内容参数-->
+    var planId = [[${planId}]];
+    var forecastTimeStart = [[${forecastTimeStart}]];
+    var forecastSection = [[${forecastSection}]];
+
+    layui.use(['layer', 'form', 'table', 'laydate'], function () {
+        var layer = layui.layer,
+            $ = layui.jquery;
+
+
+        var colors = ['#0c1efd', '#fd6134', '#c916f2'];
+        //率定结果图
+        var myChart_forecastResult = echarts.init(document.getElementById("forecast_result"), 'macarons');
+        myChart_forecastResult.setOption({
+            color: colors,
+            title: {
+                text: forecastSection+'——单方案预报结果图',
+                left: 'center',
+                top: '15px'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+
+            toolbox: { //可视化的工具箱
+                show: true,
+                feature: {
+                    dataView: { //数据视图
+                        show: true,
+                        title: '数据视图',
+                        readOnly: false,
+                        optionToContent: function (opt) {
+                            var axisData = opt.xAxis[0].data;
+                            var series = opt.series;
+                            var tableTitle = "单模型预报结果";
+                            var table = '<div style="position:absolute;top: 5px;left: 0px;right: 0px;line-height: 1.4em;text-align:center;font-size:14px;">'
+                                + tableTitle + '</div>'
+                                + '<table id="test" class="table-bordered table-striped" style="width:100%;text-align:center">'
+                                + '<tbody><tr>'
+                                + '<td>时间</td>'
+                                + '<td>' + series[0].name + '</td>'
+                                + '<td>' + series[1].name + '</td>'
+                                + '</tr>';
+                            for (var i = 0, l = axisData.length; i < l; i++) {
+                                table += '<tr>'
+                                    + '<td>' + axisData[i] + '</td>'
+                                    + '<td>' + series[0].data[i] + '</td>'
+                                    + '<td>' + series[1].data[i] + '</td>'
+                                    + '</tr>';
+                            }
+                            table += '</tbody>';
+                            return table;
+                        }
+                    },
+                    restore: { //重置
+                        show: true
+                    },
+                    saveAsImage: {//保存图片
+                        show: true
+                    }
+                }
+            },
+            legend: {
+                data: ['历史均值', '预报值'],
+                orient: 'vertical',//垂直显示，默认水平horizontal
+                top: 'middle',    //延Y轴居中
+                left: 'right', //居右显示
+                align: 'left'//图标左对齐
+            },
+            xAxis: [
+                {
+                    name: '时间',
+                    type: 'category',
+                    data: [],
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    name: '径流量（m^3/s）',
+                    type: 'value',
+                    min: 0,
+                    axisLabel: {
+                        formatter: '{value} '
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '历史均值',
+                    type: 'bar',
+                    data: []
+                },
+                {
+                    name: '预报值',
+                    type: 'line',
+                    data: []
+                }
+            ]
+        });
+
+        //为图赋值
+        function getJson() {
+            $.get("/forecast/forecastInfo/edit/forecastResult?planId=" + planId
+                + "&forecastTimeStart=" + forecastTimeStart
+                + "&forecastSection=" + forecastSection
+                , {}
+                , function (res) {
+                    myChart_forecastResult.setOption({
+                        xAxis: [
+                            {
+                                data: res.timeArr
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '历史均值',
+                                data: res.historyAverageValueArr
+                            }, {
+                                name: '预报值',
+                                data: res.forecastValueArr
+                            }
+                        ]
+                    })
+
+                }, "json"
+            );
+        }
+//        执行函数展示图
+        getJson();
+
+    });
+
+</script>
+
+</body>
+</html>

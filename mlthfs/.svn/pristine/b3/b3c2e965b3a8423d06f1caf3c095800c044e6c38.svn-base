@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>预报发布</title>
+</head>
+<body>
+具体预报发布形式待商定。
+</body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.ForecastReleaseResultDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.ForecastReleaseResult">
+		<id column="ID" property="id" />
+		<result column="FORECAST_SECTION" property="forecastSection" />
+		<result column="FORECAST_TIME" property="forecastTime" />
+		<result column="FORECAST_VALUE" property="forecastValue" />
+		<result column="RELEASE_TIME" property="releaseTime" />
+		<result column="RELEASE_TYPE" property="releaseType" />
+		<result column="DEL_FLAG" property="delFlag" />
+		<result column="RELEASE_PERSON" property="releasePerson" />
+		<result column="MODEL_NAME" property="modelName" />
+		<result column="FORECAST_TIME_START" property="forecastTimeStart" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, FORECAST_SECTION, FORECAST_TIME, FORECAST_VALUE, RELEASE_TIME, RELEASE_TYPE, DEL_FLAG, RELEASE_PERSON, MODEL_NAME, FORECAST_TIME_START
+    </sql>
+
+</mapper>

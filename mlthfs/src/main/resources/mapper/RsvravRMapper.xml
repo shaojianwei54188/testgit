@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.RsvravRDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.RsvravR">
+		<result column="STCD" property="stcd" />
+		<result column="IDTM" property="idtm" />
+		<result column="STTDRCD" property="sttdrcd" />
+		<result column="AVRZ" property="avrz" />
+		<result column="AVINQ" property="avinq" />
+		<result column="AVOTQ" property="avotq" />
+		<result column="AVW" property="avw" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        STCD, IDTM, STTDRCD, AVRZ, AVINQ, AVOTQ, AVW
+    </sql>
+
+</mapper>

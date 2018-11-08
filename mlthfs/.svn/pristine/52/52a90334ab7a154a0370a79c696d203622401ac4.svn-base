@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.ForecastResultDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.ForecastResult">
+		<id column="ID" property="id" />
+		<result column="FORECAST_SECTION" property="forecastSection" />
+		<result column="FORECAST_TIME_START" property="forecastTimeStart" />
+		<result column="PLAN_ID" property="planId" />
+		<result column="PLAN_TYPE" property="planType" />
+		<result column="MODEL_NAME" property="modelName" />
+		<result column="FORECAST_TIME" property="forecastTime" />
+		<result column="FORECAST_VALUE" property="forecastValue" />
+		<result column="HISTORY_AVERAGE" property="historyAverage" />
+		<result column="FORECAST_DEPARTURE" property="forecastDeparture" />
+		<result column="FORECAST_LEVEL" property="forecastLevel" />
+		<result column="FORECAST_ADJUST_VALUE" property="forecastAdjustValue" />
+		<result column="FORECAST_BMA_VALUE" property="forecastBmaValue" />
+		<result column="FORECAST_Q50_VALUE" property="forecastQ50Value" />
+		<result column="FORECAST_Q5_VALUE" property="forecastQ5Value" />
+		<result column="FORECAST_Q95_VALUE" property="forecastQ95Value" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_DATE" property="updateDate" />
+		<result column="DEL_FLAG" property="delFlag" />
+		<result column="REMARKS" property="remarks" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, FORECAST_SECTION, FORECAST_TIME_START, PLAN_ID, PLAN_TYPE, MODEL_NAME, FORECAST_TIME, FORECAST_VALUE, HISTORY_AVERAGE, FORECAST_DEPARTURE, FORECAST_LEVEL, FORECAST_ADJUST_VALUE, FORECAST_BMA_VALUE, FORECAST_Q50_VALUE, FORECAST_Q5_VALUE, FORECAST_Q95_VALUE, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, DEL_FLAG, REMARKS
+    </sql>
+
+</mapper>

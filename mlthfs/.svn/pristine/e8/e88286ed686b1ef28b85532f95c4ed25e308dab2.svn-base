@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.PlanInfoDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.PlanInfo">
+		<id column="ID" property="id" />
+		<result column="FORECAST_SECTION" property="forecastSection" />
+		<result column="FORECAST_TIME_START" property="forecastTimeStart" />
+		<result column="FORECAST_TIME_END" property="forecastTimeEnd" />
+		<result column="PLAN_ID" property="planId" />
+		<result column="PLAN_TYPE" property="planType" />
+		<result column="MODEL_NAME" property="modelName" />
+		<result column="IS_FORECAST" property="isForecast" />
+		<result column="IS_ADJUST" property="isAdjust" />
+		<result column="IS_ASSESS" property="isAssess" />
+		<result column="PLAN_PATH" property="planPath" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_DATE" property="updateDate" />
+		<result column="DEL_FLAG" property="delFlag" />
+		<result column="REMARKS" property="remarks" />
+		<result column="STCD" property="stcd" />
+		<result column="IS_COMBINE" property="isCombine" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, FORECAST_SECTION, FORECAST_TIME_START, FORECAST_TIME_END, PLAN_ID, PLAN_TYPE, MODEL_NAME, IS_FORECAST, IS_ADJUST, IS_ASSESS, PLAN_PATH, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, DEL_FLAG, REMARKS, STCD, IS_COMBINE
+    </sql>
+
+</mapper>

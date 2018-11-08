@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>预报发布</title>
+</head>
+<body>
+预报结果发布界面，同一预报断面，同一预报时间，在许多预报结果中选择一个发布入库。
+</body>
+</html>

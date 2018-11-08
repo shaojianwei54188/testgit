@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.HistoryQDataDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.HistoryQData">
+		<id column="ID" property="id" />
+		<result column="STCD" property="stcd" />
+		<result column="FORECAST_SECTION" property="forecastSection" />
+		<result column="TM" property="tm" />
+		<result column="MONTH_Q" property="monthQ" />
+		<result column="MONTH_AVERAGE_Q" property="monthAverageQ" />
+		<result column="MONTH_MAX_Q" property="monthMaxQ" />
+		<result column="MONTH_MIN_Q" property="monthMinQ" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, STCD, FORECAST_SECTION, TM, MONTH_Q, MONTH_AVERAGE_Q, MONTH_MAX_Q, MONTH_MIN_Q
+    </sql>
+
+</mapper>

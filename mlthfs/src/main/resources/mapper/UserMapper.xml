@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.UserDao">
+
+	<!---->
+	<!--&lt;!&ndash; 通用查询映射结果 &ndash;&gt;-->
+	<!--<resultMap id="BaseResultMap" type="com.hhu.mlthfs.plan.User">-->
+		<!--<id column="ID" property="id" />-->
+		<!--<result column="LOGIN_NAME" property="loginName" />-->
+		<!--<result column="NICK_NAME" property="nickName" />-->
+		<!--<result column="PASSWORD" property="password" />-->
+		<!--<result column="SALT" property="salt" />-->
+		<!--<result column="CREATE_DATE" property="createDate" />-->
+		<!--<result column="CREATE_BY" property="createBy" />-->
+		<!--<result column="UPDATE_DATE" property="updateDate" />-->
+		<!--<result column="UPDATE_BY" property="updateBy" />-->
+		<!--<result column="DEL_FLAG" property="delFlag" />-->
+		<!--<result column="REMARKS" property="remarks" />-->
+		<!--<result column="TEL" property="tel" />-->
+		<!--<result column="EMAIL" property="email" />-->
+	<!--</resultMap>-->
+
+    <!--&lt;!&ndash; 通用查询结果列 &ndash;&gt;-->
+    <!--<sql id="Base_Column_List">-->
+        <!--ID, LOGIN_NAME, NICK_NAME, PASSWORD, SALT, CREATE_DATE, CREATE_BY, UPDATE_DATE, UPDATE_BY, DEL_FLAG, REMARKS, TEL, EMAIL-->
+    <!--</sql>-->
+
+
+	<!-- 这儿定义一个resultMap -->
+	<resultMap type="com.hhu.mlthfs.model.User" id="UserMap">
+		<id property="id" column="id"/>
+		<result property="loginName" column="login_name"/>
+		<result property="nickName" column="nick_name"/>
+		<result property="tel" column="tel"/>
+		<result property="email" column="email"/>
+		<result property="password"  column="password"/>
+		<result property="salt"  column="salt"/>
+		<result property="remarks" column="remarks"/>
+		<result property="delFlag" column="del_flag"/>
+
+		<collection property="roleLists"  ofType="com.hhu.mlthfs.model.Role">
+			<result property="id" column="role.id"/>
+			<result property="name" column="role.name"/>
+		</collection>
+	</resultMap>
+
+	<select id="selectUserByMap" resultMap="UserMap"  parameterType="java.util.Map">
+		SELECT
+		u.id,
+		u.login_name,
+		u.nick_name,
+		u.tel,
+		u.email,
+		u.password,
+		u.salt,
+		u.del_flag,
+		r.id     		AS 	"role.id",
+		r.name			AS	"role.name",
+		u.remarks
+		from
+		sys_user u
+		left join sys_user_role  sur  	on  	sur.user_id = u.id
+		left join sys_role r				 	on  	r.id = sur.role_id
+
+		where
+		1=1
+		<if test="id == 0 or id == null">
+			and u.del_flag = false
+			and r.del_flag = false
+		</if>
+		<if test="loginName !=null and loginName !=''">
+			and (
+			u.login_name 	= #{loginName}
+			or u.tel 				= #{loginName}
+			or u.email 		= #{loginName}
+			)
+		</if>
+		<if test="id != 0 and id != null">
+			and u.id = #{id}
+		</if>
+	</select>
+
+	<select id="saveUserRoles">
+		insert into sys_user_role(user_id,role_id)
+		values
+		<foreach collection="roleIds" item="item" index="index" separator="," >
+			(#{userId},#{item.id})
+		</foreach>
+	</select>
+</mapper>

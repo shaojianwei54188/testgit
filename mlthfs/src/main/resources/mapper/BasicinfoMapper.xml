@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.BasicinfoDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.Basicinfo">
+		<id column="STCD" property="stcd" />
+		<result column="STNM" property="stnm" />
+		<result column="STTP" property="sttp" />
+		<result column="RVNM" property="rvnm" />
+		<result column="STLC" property="stlc" />
+		<result column="CREATE_BY" property="createBy" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="UPDATE_DATE" property="updateDate" />
+		<result column="DEL_FLAG" property="delFlag" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        STCD, STNM, STTP, RVNM, STLC, CREATE_BY, CREATE_DATE, UPDATE_BY, UPDATE_DATE, DEL_FLAG
+    </sql>
+
+</mapper>

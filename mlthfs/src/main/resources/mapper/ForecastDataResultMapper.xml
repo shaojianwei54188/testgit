@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.ForecastDataResultDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.ForecastDataResult">
+		<id column="ID" property="id" />
+		<result column="FORECAST_SECTION" property="forecastSection" />
+		<result column="FORECAST_TIME_START" property="forecastTimeStart" />
+		<result column="FORECAST_TIME" property="forecastTime" />
+		<result column="PLAN_NAME" property="planName" />
+		<result column="FORECAST_VALUE" property="forecastValue" />
+		<result column="HISTORY_AVERAGE" property="historyAverage" />
+		<result column="FORECAST_DEPARTURE" property="forecastDeparture" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, FORECAST_SECTION, FORECAST_TIME_START, FORECAST_TIME, PLAN_NAME, FORECAST_VALUE, HISTORY_AVERAGE, FORECAST_DEPARTURE
+    </sql>
+
+
+
+	<select id="findForecastDepartureByTimeAndSection" parameterType="String" resultType="com.hhu.mlthfs.model.vo.ForecastDepartureVo">
+		select *
+from(
+    select PLAN_NAME, FORECAST_TIME,FORECAST_DEPARTURE
+    from FORECAST_DATA_RESULT
+    where forecast_section=#{forecastSection}and FORECAST_TIME_START=#{forecastTimeStart}
+)
+pivot(
+    sum(FORECAST_DEPARTURE)
+    for plan_name
+    in('随机森林' as rf,'支持向量机' as svm,'多元回归' as mr,'季节性自回归'as sap,'小波分析' as wa,'综合预报'as bma,'可靠性评估'as hup)
+)
+order by FORECAST_TIME asc
+
+
+	</select>
+</mapper>

@@ -1,0 +1,219 @@
+[
+  {
+    "title": "数据管理",
+    "icon": "&#xe716;",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "基础信息",
+        "icon": "&#xe61c;",
+        "href": "/data/basicinfoPage",
+        "spread": false
+      },
+      {
+        "title": "水情数据",
+        "icon": "&#xe636;",
+        "href": "/data/waterInfoPage",
+        "spread": false
+      },
+      {
+        "title": "气候因子",
+        "icon": "&#xe66c;",
+        "href": "/data/climateIndexPage",
+        "spread": false
+      }
+    ]
+  },
+  {
+    "title": "模型指南",
+    "icon": "&#xe653;",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "模型介绍",
+        "icon": "&#xe7ae;",
+        "href": "/modelManage/modelListsPage",
+        "spread": false
+      }
+    ]
+  },
+  {
+    "title": "单模型创建",
+    "icon": "&#xe632;",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "随机森林",
+        "icon": "&#xe629;",
+        "href": "/plan/rf/rfPage",
+        "spread": false
+      },
+      {
+        "title": "支持向量机",
+        "icon": "&#xe62c;",
+        "href": "/plan/svm/svmPage",
+        "spread": false
+      },
+      {
+        "title": "季节性自回归",
+        "icon": "&#xe62e;",
+        "href": "/plan/sap/sapPage",
+        "spread": false
+      },
+      {
+        "title": "多元回归",
+        "icon": "&#xe628;",
+        "href": "/plan/mr/mrPage",
+        "spread": false
+      },
+      {
+        "title": "小波分析",
+        "icon": "&#xe756;",
+        "href": "/plan/wa/waPage",
+        "spread": false
+      }
+    ]
+  },
+  {
+    "title": "单模型评价",
+    "icon": "&#xe620;",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "模型详情",
+        "icon": "&#xe705;",
+        "href": "/plan/planinfoPage",
+        "spread": false
+      },
+      {
+        "title": "模型评价",
+        "icon": "&#xe735;",
+        "href": "/plan/planAssessPage",
+        "spread": false
+      }
+    ]
+  },
+  {
+    "title": "单模型预报",
+    "icon": "&#xe705;",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "作业预报",
+        "icon": "&#xe705;",
+        "href": "/forecast/doForecastPage",
+        "spread": false
+      },
+      {
+        "title": "预报结果",
+        "icon": "&#xe6b1;",
+        "href": "/forecast/forecastinfoPage",
+        "spread": false
+      }
+    ]
+  },
+  {
+    "title": "单模型校正",
+    "icon": "&#xe6b2;",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "执行校正",
+        "icon": "&#xe615;",
+        "href": "/adjust/doAdjustPage",
+        "spread": false
+      },
+      {
+        "title": "校正结果",
+        "icon": "&#xe609;",
+        "href": "/adjust/adjustResultPage",
+        "spread": false
+      }
+    ]
+  },
+  {
+    "title": "模型综合",
+    "icon": "&#xe66a;",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "执行综合",
+        "icon": "&#xe66a;",
+        "href": "/combine/doCombinationPage",
+        "spread": false
+      },
+      {
+        "title": "综合结果",
+        "icon": "&#xe66e;",
+        "href": "/combine/CombinationResultPage",
+        "spread": false
+      }
+    ]
+  },
+  {
+    "title": "可靠性评估",
+    "icon": "&#xe679;",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "执行评估",
+        "icon": "&#xe615;",
+        "href": "/assess/doAssessPage",
+        "spread": false
+      },{
+        "title": "评估结果",
+        "icon": "&#xe679;",
+        "href": "/assess/assessResultPage",
+        "spread": false
+      }
+    ]
+  },
+  {
+    "title": "预报发布",
+    "icon": "&#xe609;",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "预报发布",
+        "icon": "&#xe609;",
+        "href": "/release/releasePage",
+        "spread": false
+      }
+    ]
+  },
+  {
+    "title": "系统管理",
+    "icon": "&#xe631;",
+    "href": "",
+    "spread": false,
+    "children": [
+      {
+        "title": "用户管理",
+        "icon": "&#xe6af;",
+        "href": "/system/usersPage",
+        "spread": false
+      },
+      {
+        "title": "角色管理",
+        "icon": "&#xe770;",
+        "href": "/system/rolesPage",
+        "spread": false
+      },
+      {
+        "title": "权限管理",
+        "icon": "&#x1005;",
+        "href": "/system/menusPage",
+        "spread": false
+      }
+    ]
+  }
+]

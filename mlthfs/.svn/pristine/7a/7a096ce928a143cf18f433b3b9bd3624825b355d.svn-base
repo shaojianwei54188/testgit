@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>模型介绍界面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all"/>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
+    <link rel="stylesheet" th:href="@{/common/css/main.css}" media="all"/>
+</head>
+<body class="childrenBody">
+<div class="panel_box row">
+    <div class="panel col max_panel">
+        <a href="javascript:" data-url="/modelManage/sapDirection">
+            <div class="panel_icon" style="background-color: #56cbe8">
+                <i class="layui-icon" data-icon="&#xe62e;">&#xe62e;</i>
+            </div>
+            <div class="panel_word newMessage">
+                <span>季节性自回归</span>
+                <cite>预报模型</cite>
+            </div>
+        </a>
+    </div>
+    <div class="panel col max_panel">
+        <a href="javascript:" data-url="/modelManage/svmDirection">
+            <div class="panel_icon" style="background-color: #65e8a3">
+                <i class="layui-icon" data-icon="&#xe62c;">&#xe62c;</i>
+            </div>
+            <div class="panel_word newMessage">
+                <span>支持向量机</span>
+                <cite>预报模型</cite>
+            </div>
+        </a>
+    </div>
+    <div class="panel col max_panel">
+        <a href="javascript:" data-url="/modelManage/rfDirection">
+            <div class="panel_icon" style="background-color: #3137e8">
+                <i class="layui-icon" data-icon="&#xe629;">&#xe629;</i>
+            </div>
+            <div class="panel_word newMessage">
+                <span>随机森林</span>
+                <cite>预报模型</cite>
+            </div>
+        </a>
+    </div>
+    <div class="panel col max_panel">
+        <a href="javascript:" data-url="/modelManage/mrDirection">
+            <div class="panel_icon" style="background-color: #a09ae8">
+                <i class="layui-icon" data-icon="&#xe628;">&#xe628;</i>
+            </div>
+            <div class="panel_word newMessage">
+                <span>多元回归</span>
+                <cite>预报模型</cite>
+            </div>
+        </a>
+    </div>
+
+    <div class="panel col max_panel">
+        <a href="javascript:" data-url="/modelManage/waDirection">
+            <div class="panel_icon" style="background-color: #e852a3">
+                <i class="layui-icon" data-icon="&#xe756;">&#xe756;</i>
+            </div>
+            <div class="panel_word newMessage">
+                <span>小波分析</span>
+                <cite>预报模型</cite>
+            </div>
+        </a>
+    </div>
+    <div class="panel col max_panel">
+        <a href="javascript:" data-url="/modelManage/arDirection">
+            <div class="panel_icon" style="background-color: #f8635e">
+                <i class="layui-icon" data-icon="&#x1005;">&#x1005;</i>
+            </div>
+            <div class="panel_word newMessage">
+                <span>误差自回归</span>
+                <cite>校正模型</cite>
+            </div>
+        </a>
+    </div>
+
+    <div class="panel col max_panel">
+        <a href="javascript:" data-url="/modelManage/bmaDirection">
+            <div class="panel_icon" style="background-color: #a2daed">
+                <i class="layui-icon" data-icon="&#xe674;">&#xe674;</i>
+            </div>
+            <div class="panel_word newMessage">
+                <span>贝叶斯平均</span>
+                <cite>综合模型</cite>
+            </div>
+        </a>
+    </div>
+    <div class="panel col max_panel">
+        <a href="javascript:" data-url="/modelManage/hupDirection">
+            <div class="panel_icon" style="background-color: #f9c55f">
+                <i class="layui-icon" data-icon="&#xe609;">&#xe609;</i>
+            </div>
+            <div class="panel_word newMessage">
+                <span>不确定性分析</span>
+                <cite>评估模型</cite>
+            </div>
+        </a>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/lib/layui/layui.js}"></script>
+<script>
+    layui.use(['layer','jquery','form'],function(){
+        var layer = layui.layer,
+            $ = layui.jquery,
+            form = layui.form;
+
+        $(".panel a").on("click",function(){
+            window.parent.addTab($(this));
+        });
+    });
+</script>
+</body>
+</html>

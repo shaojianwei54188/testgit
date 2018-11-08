@@ -1,0 +1,145 @@
+package com.hhu.mlthfs.controller.plan.planassess;
+
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.google.common.collect.Maps;
+import com.hhu.mlthfs.base.BaseController;
+import com.hhu.mlthfs.model.PlanInfo;
+import com.hhu.mlthfs.model.SelectedFactors;
+import com.hhu.mlthfs.utils.LayerData;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
+
+import javax.servlet.ServletRequest;
+import java.io.IOException;
+import java.util.*;
+
+import static com.hhu.mlthfs.utils.ExcelUtils.excelToJson;
+
+/**
+ * 方案详情界面planinfoPage 控制层
+ */
+@RestController
+@RequestMapping("/plan")
+public class PlanInfoController extends BaseController {
+
+    public static final Logger logger = LoggerFactory.getLogger(PlanInfoController.class);
+
+    /**
+     * 进入系统 方案详情界面。
+     *
+     * @return
+     */
+    @GetMapping("/planinfoPage")
+    public ModelAndView planinfoIndex() {
+        ModelAndView mav = new ModelAndView("page/plan/planinfo/planinfoPage");
+        return mav;
+    }
+
+    /**
+     * 获取方案信息，用于展示在方案详情界面。
+     */
+    @GetMapping("/planinfo")
+    public LayerData<PlanInfo> list(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                    @RequestParam(value = "limit", defaultValue = "10") Integer limit,
+                                    ServletRequest request) {
+        Map map = WebUtils.getParametersStartingWith(request, "s_");
+        LayerData<PlanInfo> planInfoLayerData = new LayerData<>();
+        EntityWrapper<PlanInfo> planInfoEntityWrapper = new EntityWrapper<>();
+        planInfoEntityWrapper.eq("del_flag", false);
+        planInfoEntityWrapper.like("plan_type", "0");//单模型方案
+        if (!map.isEmpty()) {
+            String keys = (String) map.get("key");
+            if (StringUtils.isNotBlank(keys)) {
+                planInfoEntityWrapper.like("forecast_section", keys);
+            } else {
+                map.remove("key");
+            }
+//             起报时间
+            String forecastTimeStart = (String) map.get("forecastTimeStart");
+            if (StringUtils.isNotBlank(forecastTimeStart)) {
+                planInfoEntityWrapper.like("forecast_time_start", forecastTimeStart);
+            } else {
+                map.remove("forecastTimeStart");
+            }
+
+        }
+        Page<PlanInfo> planInfoPage = planInfoService.selectPage(new Page<>(page, limit), planInfoEntityWrapper);
+        planInfoLayerData.setCount(planInfoPage.getTotal());
+        planInfoLayerData.setData(planInfoPage.getRecords());
+        logger.info(planInfoLayerData.toString());
+        return planInfoLayerData;
+    }
+
+    @GetMapping("/planinfo/edit")
+    public ModelAndView edit(Long id,
+                             String planId,
+                             String forecastSection,
+                             Model model) {
+        logger.info("id==" + id);
+        logger.info("planId==" + planId);
+        logger.info("forecastSection==" + forecastSection);
+        Long id11 = id;
+        model.addAttribute("id", id);
+        model.addAttribute("planId", planId);
+        model.addAttribute("forecastSection", forecastSection);
+        ModelAndView mav = new ModelAndView("page/plan/planinfo/edit");
+        return mav;
+    }
+
+
+    @GetMapping("/planinfo/editTable")
+    public String jsonTable(Model model) throws IOException {
+        String excelPath1 = "F:\\forecast_plans\\DanJiangKou\\sys_plan_2018-11_RF_01\\selectedFactors.xlsx"; //Excel2007
+        //excel转换成json
+        LinkedHashMap<String, String> excelMap = excelToJson(excelPath1);
+//        System.out.println(excelMap.get(1+"月"));
+//        System.out.println(excelMap.get("1月").length());
+
+        Map<String, Object> result = Maps.newHashMap();
+        result.put("status", 200);
+        result.put("message", "");
+//        result.put("total",excelMap.get("1月").length());
+        result.put("rows", excelMap.get("1月"));
+        System.out.println(result.toString());
+
+//        JSONObject itemJSONObj = JSONObject.parseObject(JSON.toJSONString(result));
+//
+//        System.out.println(itemJSONObj);
+//        System.out.println(itemJSONObj.toString());
+
+
+        JSONObject json = new JSONObject(result);
+
+        System.out.println(json);
+        System.out.println(json.toString());
+        System.out.println(json.toString()
+                .replaceAll("\\\\", "")
+                .replaceAll("\"\\[", "\\[")
+                .replaceAll("]\"", "]"));
+
+        String jsonda = json.toString()
+                .replaceAll("\\\\", "")
+                .replaceAll("\"\\[", "\\[")
+                .replaceAll("]\"", "]");
+        System.out.println("+++++++" + jsonda);
+        return jsonda;
+    }
+
+    @GetMapping("/planinfo/edit/detail")
+    public LayerData<SelectedFactors> list() throws IOException {
+
+        LayerData<SelectedFactors> selectedFactorsLayerData = new LayerData<>();
+
+
+        return selectedFactorsLayerData;
+    }
+
+
+}

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.RvavRDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.RvavR">
+		<result column="STCD" property="stcd" />
+		<result column="IDTM" property="idtm" />
+		<result column="STTDRCD" property="sttdrcd" />
+		<result column="AVZ" property="avz" />
+		<result column="AVQ" property="avq" />
+
+		<result column="STNM" property="stnm"/>
+		<result column="STTP" property="sttp"/>
+		<result column="RIVER_AVZ" property="riverAvz"/>
+		<result column="RIVER_AVQ" property="riverAvq"/>
+		<result column="RSVR_AVRZ" property="rsvrAvrz"/>
+		<result column="RSVR_AVINQ" property="rsvrAvinq"/>
+		<result column="RSVR_AVOTQ" property="rsvrAvotq"/>
+		<result column="RSVR_AVW" property="rsvrAvw"/>
+
+
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        STCD, IDTM, STTDRCD, AVZ, AVQ
+    </sql>
+
+	<!--List<WaterInfoVo> findWaterInfoListByMonth(Pagination page);-->
+
+	<select id="findWaterInfoListByMonth" resultType="com.hhu.mlthfs.model.vo.WaterInfoVo">
+
+        select p.STCD,q.sttp,q.stnm,p.RIVER_AVZ,p.RIVER_AVQ,p.RSVR_AVRZ,p.RSVR_AVINQ,p.RSVR_AVOTQ,p.RSVR_AVW
+        from
+        (
+        (select STCD,RIVER_AVZ,RIVER_AVQ,RSVR_AVRZ,RSVR_AVINQ,RSVR_AVOTQ,RSVR_AVW
+        from
+        (select A.STCD ,
+        round(avg(case when A.STTDRCD='5' then A.AVZ else null  end),3) as "RIVER_AVZ",
+        round(avg(case when A.STTDRCD='5' then A.AVQ else null  end),3) as "RIVER_AVQ",
+        round(avg(case when A.STTDRCD='5' then A.AVRZ else null end),3) as "RSVR_AVRZ",
+        round(avg(case when A.STTDRCD='5' then A.AVINQ else null  end),3) as "RSVR_AVINQ",
+        round(avg(case when A.STTDRCD='5' then A.AVOTQ else null  end),3) as "RSVR_AVOTQ",
+        round(avg(case when A.STTDRCD='5' then A.AVW else null  end),3) as "RSVR_AVW"
+        from
+        (select ST_RVAV_R.* ,null AVRZ,null AVINQ,null AVOTQ,null AVW
+        from   ST_RVAV_R
+        where
+        to_date(#{startTm}||'-1 08:00:00','yyyy-mm-dd hh24:mi:ss') &lt; idtm and idtm &lt;= to_date(#{endTm}||'-1 08:00:00','yyyy-mm-dd hh24:mi:ss')
+        order by idtm asc
+        ) A
+        group by A.STCD)
+        )
+        union all
+        (select STCD,RIVER_AVZ,RIVER_AVQ,RSVR_AVRZ,RSVR_AVINQ,RSVR_AVOTQ,RSVR_AVW
+        from
+        (
+        select A.STCD,
+        round(avg(case when A.STTDRCD='5' then A.AVZ else null  end),3) as "RIVER_AVZ",
+        round(avg(case when A.STTDRCD='5' then A.AVQ else null  end),3) as "RIVER_AVQ",
+        round(avg(case when A.STTDRCD='5' then A.AVRZ else null end),3) as "RSVR_AVRZ",
+        round(avg(case when A.STTDRCD='5' then A.AVINQ else null  end),3) as "RSVR_AVINQ",
+        round(avg(case when A.STTDRCD='5' then A.AVOTQ else null  end),3) as "RSVR_AVOTQ",
+        round(avg(case when A.STTDRCD='5' then A.AVW else null  end),3) as "RSVR_AVW"
+        from
+        (select st_rsvrav_r.* ,null AVZ,null AVQ
+        from   st_rsvrav_r
+        where
+        STCD='61802700'
+        and
+        to_date(#{startTm}||'-1 08:00:00','yyyy-mm-dd hh24:mi:ss') &lt; idtm and idtm &lt;= to_date(#{endTm}||'-1 08:00:00','yyyy-mm-dd hh24:mi:ss')
+        order by idtm asc
+        ) A
+        group by A.STCD
+        )
+        )
+        union all
+        (select STCD,RIVER_AVZ,RIVER_AVQ,RSVR_AVRZ,RSVR_AVINQ,RSVR_AVOTQ,RSVR_AVW
+        from
+        (select A.STCD,
+        round(avg(case when A.STTDRCD='1' then A.AVZ else null  end),3) as "RIVER_AVZ",
+        round(avg(case when A.STTDRCD='1' then A.AVQ else null  end),3) as "RIVER_AVQ",
+        round(avg(case when A.STTDRCD='1' then A.AVRZ else null end),3) as "RSVR_AVRZ",
+        round(avg(case when A.STTDRCD='1' then A.AVINQ else null  end),3) as "RSVR_AVINQ",
+        round(avg(case when A.STTDRCD='1' then A.AVOTQ else null  end),3) as "RSVR_AVOTQ",
+        round(avg(case when A.STTDRCD='1' then A.AVW else null  end),3) as "RSVR_AVW"
+        from
+        (select st_rsvrav_r.* ,null AVZ,null AVQ
+        from   st_rsvrav_r
+        where
+        STCD='60106980'
+        and
+        to_date(#{startTm}||'-02 08:00:00','yyyy-mm-dd hh24:mi:ss') &lt;= idtm and idtm  &lt; to_date(#{endTm}||'-02 08:00:00','yyyy-mm-dd hh24:mi:ss')
+        order by idtm asc
+        ) A
+        group by A.STCD
+        )
+        )
+        )p,
+        BASICINFO q
+        where p.stcd=q.stcd
+        order by q.sttp ASC
+
+
+    </select>
+</mapper>

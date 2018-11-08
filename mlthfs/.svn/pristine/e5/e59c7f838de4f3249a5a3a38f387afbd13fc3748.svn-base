@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>季节性自回归模型</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all"/>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
+    <link rel="stylesheet" th:href="@{/common/css/main.css}" media="all"/>
+</head>
+<body class="childrenBody">
+<div class="row" th:align="left"><h1>&nbsp;&nbsp;季节性自回归模型（SAP）</h1><br><br></div>
+
+
+<div class="row" style="height: 350px">
+    <div class="sysNotice col" align="center">
+
+        <img th:src="@{/common/images/sap.jpg}" style="height: 350px">
+
+    </div>
+    <div class="sysNotice col">
+        <blockquote class="layui-elem-quote title">模型介绍</blockquote>
+        <div class="layui-elem-quote layui-quote-nm" style="font-size: large;line-height: 30px">
+            <ol>
+                <li>模型思想：</li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;季节性自回归模型是对平稳性自回归模型的改进，使其适用于季节性时间序列，即序列的统计参数随季节变化的随机序列。</li>
+                <li>模型优点：</li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;消除了均值、方差的季节性影响</li>
+            </ol>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<div class="row">
+    <div class="sysNotice col">
+        <blockquote class="layui-elem-quote title">模型信息</blockquote>
+        <table class="layui-table">
+            <colgroup>
+                <col width="150">
+                <col>
+            </colgroup>
+            <tbody>
+            <tr>
+                <td>模型名称（中）</td>
+                <td class="version">季节性自回归模型</td>
+            </tr>
+            <tr>
+                <td>模型名称（英）</td>
+                <td class="author">SAP</td>
+            </tr>
+            <tr>
+                <td>所属分类</td>
+                <td class="homePage">预报</td>
+            </tr>
+            <tr>
+                <td>预报因子</td>
+                <td class="dataBase">径流序列</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="sysNotice col">
+        <blockquote class="layui-elem-quote title">参数信息</blockquote>
+        <table class="layui-table">
+            <colgroup>
+                <col width="150">
+                <col>
+            </colgroup>
+            <tbody>
+            <tr>
+                <td>u<sub>τ</sub></td>
+                <td class="version">τ季随机变量的均值</td>
+            </tr>
+            <tr>
+                <td>σ<sub>τ</sub></td>
+                <td class="version">τ季随机变量的均方差</td>
+            </tr>
+            <tr>
+                <td>φ<sub>i,τ</sub></td>
+                <td class="version">τ季随机变量的模型第i阶自回归系数</td>
+            </tr>
+            <tr>
+                <td>ε<sub>t,τ</sub></td>
+                <td class="version">第t年第τ季的独立随机变量</td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/lib/layui/layui.js}"></script>
+<script>
+    layui.use(['layer','jquery','form'],function(){
+        var layer = layui.layer,
+            $ = layui.jquery,
+            form = layui.form;
+
+        $(".panel a").on("click",function(){
+            window.parent.addTab($(this));
+        });
+    });
+</script>
+</body>
+
+</html>

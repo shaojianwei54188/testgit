@@ -1,0 +1,197 @@
+package com.hhu.mlthfs.controller.assess;
+
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.google.common.collect.Maps;
+import com.hhu.mlthfs.base.BaseController;
+import com.hhu.mlthfs.model.ForecastResult;
+import com.hhu.mlthfs.utils.LayerData;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
+
+import javax.servlet.ServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 模型评估 控制层
+ *
+ *
+ *
+ */
+@RestController
+@RequestMapping("/assess")
+public class AssessController extends BaseController {
+    public static final Logger logger= LoggerFactory.getLogger(AssessController.class);
+    /**
+     * 评估执行 进入界面
+     * 页面
+     *
+     */
+    @GetMapping("/doAssessPage")
+    public ModelAndView doAssessPage(){
+
+        ModelAndView mav=new ModelAndView("page/assess/doAssessPage");
+        return mav;
+    }
+
+    /**
+     * 模型评估结果界面
+     * @return
+     */
+    @GetMapping("/assessResultPage")
+    public ModelAndView assessResultPage(){
+
+        ModelAndView mav=new ModelAndView("page/assess/assessResult/assessResultPage");
+        return mav;
+    }
+
+    /**
+     * 模型评估  列表
+     * 显示评估结果列表
+     */
+
+    @GetMapping("/assessResultInfo")
+    public LayerData<ForecastResult> list(@RequestParam(value = "page",defaultValue = "1") Integer page,
+                                          @RequestParam(value = "limit",defaultValue = "12") Integer limit,
+                                          ServletRequest request){
+        Map map= WebUtils.getParametersStartingWith(request,"s_");
+        //返回评估结果
+        LayerData<ForecastResult> assessResultLayerData=new LayerData<>();
+        EntityWrapper<ForecastResult> assessResultEntityWrapper=new EntityWrapper<>();
+        assessResultEntityWrapper.eq("del_flag",false);
+        assessResultEntityWrapper.eq("plan_type",1);
+        if(!map.isEmpty()){
+//           断面名称
+            String keys= (String) map.get("key");
+            if(StringUtils.isNotBlank(keys)){
+                assessResultEntityWrapper.like("forecast_section",keys);
+
+            }else {
+                map.remove("key");
+            }
+//          预报时间
+            String forecastTime=(String)map.get("forecastTime");
+            if(StringUtils.isNotBlank(forecastTime)){
+                assessResultEntityWrapper.like("forecast_time",forecastTime);
+            }else{
+                map.remove("forecastTime");
+            }
+//            起报时间
+            String forecastTimeStart = (String) map.get("forecastTimeStart");
+            if (StringUtils.isNotBlank(forecastTimeStart)) {
+                assessResultEntityWrapper.like("forecast_time_start", forecastTimeStart);
+            } else {
+                map.remove("forecastTimeStart");
+            }
+//            方案编号
+            String planId = (String) map.get("planId");
+            if (StringUtils.isNotBlank(forecastTimeStart)) {
+                assessResultEntityWrapper.like("plan_id", planId);
+            } else {
+                map.remove("planId");
+            }
+        }
+        Page<ForecastResult> assessResultPage=forecastResultService.selectPage(new Page<>(page,limit),assessResultEntityWrapper);
+        assessResultLayerData.setCount(assessResultPage.getTotal());
+        assessResultLayerData.setData(assessResultPage.getRecords());
+        logger.info("assessResultLayerData==="+assessResultLayerData.toString());
+        return assessResultLayerData;
+    }
+
+    /**
+     * 进入 可靠性评估详情 界面
+     * @param planId
+     * @param forecastTimeStart
+     * @param forecastSection
+     * @param model
+     * @return
+     */
+    @GetMapping("/assessResultInfo/edit")
+    public ModelAndView edit(String planId,
+                             String forecastTimeStart,
+                             String forecastSection,
+                             Model model) {
+
+        logger.info("forecastTimeStart==" + forecastTimeStart);
+        logger.info("planId==" + planId);
+        logger.info("forecastSection==" + forecastSection);
+        model.addAttribute("forecastTimeStart", forecastTimeStart);
+        model.addAttribute("planId", planId);
+        model.addAttribute("forecastSection", forecastSection);
+        ModelAndView mav = new ModelAndView("page/assess/assessResult/edit");
+        return mav;
+    }
+
+
+    @GetMapping("/assessResultInfo/edit/assessResult")
+    public Map<String, Object> assessResultList(ServletRequest request,
+                                                String planId,
+                                                String forecastTimeStart,
+                                                String forecastSection){
+
+
+        logger.info("forecastTimeStart==" + forecastTimeStart);
+        logger.info("planId==" + planId);
+        logger.info("forecastSection==" + forecastSection);
+
+        //创建集合来接受数据库数据
+        List<ForecastResult> assessResultList = new ArrayList<>();
+
+        //存放数组
+        Map<String, Object> dataMap = Maps.newHashMap();
+        EntityWrapper<ForecastResult> assessResultEntityWrapper=new EntityWrapper<>();
+//        assessResultEntityWrapper.eq("plan_type", 1);
+
+        assessResultEntityWrapper.eq("plan_id", planId);
+        assessResultEntityWrapper.eq("forecast_section", forecastSection);
+        assessResultEntityWrapper.eq("forecast_time_start", forecastTimeStart);
+
+
+        assessResultList=forecastResultService.selectList(assessResultEntityWrapper);
+        logger.info("====forecastResultList====="+assessResultList);
+        logger.info("====forecastResultList.size====="+assessResultList.size());
+
+        //创建装载预报时间的数组
+        String[] timeArr = new String[assessResultList.size()];
+        //创建装载 综合预报值 （BMA结果）的数组
+        Double[] bmaResultValueArr = new Double[assessResultList.size()];
+        //创建装载 评估倾向预报值 （HUP50%）的数组
+        Double[] assessHUP50ValueArr = new Double[assessResultList.size()];
+        //创建装载 5%下限值 （HUP5%）的数组
+        Double[] assessHUP5ValueArr = new Double[assessResultList.size()];
+        //创建装载 95%上限值（HUP95%）的数组
+        Double[] assessHUP95ValueArr = new Double[assessResultList.size()];
+
+        //定义数组下标
+        int i = 0;
+        for (ForecastResult forecastResult : assessResultList) {
+
+            timeArr[i] = forecastResult.getForecastTime();
+            bmaResultValueArr[i] = forecastResult.getForecastBmaValue();
+            assessHUP50ValueArr[i] = forecastResult.getForecastQ50Value();
+            assessHUP5ValueArr[i] = forecastResult.getForecastQ5Value();
+            assessHUP95ValueArr[i] = forecastResult.getForecastQ95Value();
+            i++;
+        }
+        //将数组放入集合
+        dataMap.put("timeArr", timeArr);
+        dataMap.put("bmaResultValueArr", bmaResultValueArr);
+        dataMap.put("assessHUP50ValueArr", assessHUP50ValueArr);
+        dataMap.put("assessHUP5ValueArr", assessHUP5ValueArr);
+        dataMap.put("assessHUP95ValueArr", assessHUP95ValueArr);
+        return dataMap;
+    }
+
+
+
+}

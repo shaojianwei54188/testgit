@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.ClimateIndexDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.ClimateIndex">
+		<id column="TM" property="tm" />
+		<result column="C1" property="c1" />
+		<result column="C2" property="c2" />
+		<result column="C3" property="c3" />
+		<result column="C4" property="c4" />
+		<result column="C5" property="c5" />
+		<result column="C6" property="c6" />
+		<result column="C7" property="c7" />
+		<result column="C8" property="c8" />
+		<result column="C9" property="c9" />
+		<result column="C10" property="c10" />
+		<result column="C11" property="c11" />
+		<result column="C12" property="c12" />
+		<result column="C13" property="c13" />
+		<result column="C14" property="c14" />
+		<result column="C15" property="c15" />
+		<result column="C16" property="c16" />
+		<result column="C17" property="c17" />
+		<result column="C18" property="c18" />
+		<result column="C19" property="c19" />
+		<result column="C20" property="c20" />
+		<result column="C21" property="c21" />
+		<result column="C22" property="c22" />
+		<result column="C23" property="c23" />
+		<result column="C24" property="c24" />
+		<result column="C25" property="c25" />
+		<result column="C26" property="c26" />
+		<result column="C27" property="c27" />
+		<result column="C28" property="c28" />
+		<result column="C29" property="c29" />
+		<result column="C30" property="c30" />
+		<result column="C31" property="c31" />
+		<result column="C32" property="c32" />
+		<result column="C33" property="c33" />
+		<result column="C34" property="c34" />
+		<result column="C35" property="c35" />
+		<result column="C36" property="c36" />
+		<result column="C37" property="c37" />
+		<result column="C38" property="c38" />
+		<result column="C39" property="c39" />
+		<result column="C40" property="c40" />
+		<result column="C41" property="c41" />
+		<result column="C42" property="c42" />
+		<result column="C43" property="c43" />
+		<result column="C44" property="c44" />
+		<result column="C45" property="c45" />
+		<result column="C46" property="c46" />
+		<result column="C47" property="c47" />
+		<result column="C48" property="c48" />
+		<result column="C49" property="c49" />
+		<result column="C50" property="c50" />
+		<result column="C51" property="c51" />
+		<result column="C52" property="c52" />
+		<result column="C53" property="c53" />
+		<result column="C54" property="c54" />
+		<result column="C55" property="c55" />
+		<result column="C56" property="c56" />
+		<result column="C57" property="c57" />
+		<result column="C58" property="c58" />
+		<result column="C59" property="c59" />
+		<result column="C60" property="c60" />
+		<result column="C61" property="c61" />
+		<result column="C62" property="c62" />
+		<result column="C63" property="c63" />
+		<result column="C64" property="c64" />
+		<result column="C65" property="c65" />
+		<result column="C66" property="c66" />
+		<result column="C67" property="c67" />
+		<result column="C68" property="c68" />
+		<result column="C69" property="c69" />
+		<result column="C70" property="c70" />
+		<result column="C71" property="c71" />
+		<result column="C72" property="c72" />
+		<result column="C73" property="c73" />
+		<result column="C74" property="c74" />
+		<result column="C75" property="c75" />
+		<result column="C76" property="c76" />
+		<result column="C77" property="c77" />
+		<result column="C78" property="c78" />
+		<result column="C79" property="c79" />
+		<result column="C80" property="c80" />
+		<result column="C81" property="c81" />
+		<result column="C82" property="c82" />
+		<result column="C83" property="c83" />
+		<result column="C84" property="c84" />
+		<result column="C85" property="c85" />
+		<result column="C86" property="c86" />
+		<result column="C87" property="c87" />
+		<result column="C88" property="c88" />
+		<result column="C89" property="c89" />
+		<result column="C90" property="c90" />
+		<result column="C91" property="c91" />
+		<result column="C92" property="c92" />
+		<result column="C93" property="c93" />
+		<result column="C94" property="c94" />
+		<result column="C95" property="c95" />
+		<result column="C96" property="c96" />
+		<result column="C97" property="c97" />
+		<result column="C98" property="c98" />
+		<result column="C99" property="c99" />
+		<result column="C100" property="c100" />
+		<result column="C101" property="c101" />
+		<result column="C102" property="c102" />
+		<result column="C103" property="c103" />
+		<result column="C104" property="c104" />
+		<result column="C105" property="c105" />
+		<result column="C106" property="c106" />
+		<result column="C107" property="c107" />
+		<result column="C108" property="c108" />
+		<result column="C109" property="c109" />
+		<result column="C110" property="c110" />
+		<result column="C111" property="c111" />
+		<result column="C112" property="c112" />
+		<result column="C113" property="c113" />
+		<result column="C114" property="c114" />
+		<result column="C115" property="c115" />
+		<result column="C116" property="c116" />
+		<result column="C117" property="c117" />
+		<result column="C118" property="c118" />
+		<result column="C119" property="c119" />
+		<result column="C120" property="c120" />
+		<result column="C121" property="c121" />
+		<result column="C122" property="c122" />
+		<result column="C123" property="c123" />
+		<result column="C124" property="c124" />
+		<result column="C125" property="c125" />
+		<result column="C126" property="c126" />
+		<result column="C127" property="c127" />
+		<result column="C128" property="c128" />
+		<result column="C129" property="c129" />
+		<result column="C130" property="c130" />
+		<result column="UPDATE_DATE" property="updateDate" />
+		<result column="REMARKS" property="remarks" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="DEL_FLAG" property="delFlag" />
+		<result column="UPDATE_BY" property="updateBy" />
+		<result column="CREATE_BY" property="createBy" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        TM, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21, C22, C23, C24, C25, C26, C27, C28, C29, C30, C31, C32, C33, C34, C35, C36, C37, C38, C39, C40, C41, C42, C43, C44, C45, C46, C47, C48, C49, C50, C51, C52, C53, C54, C55, C56, C57, C58, C59, C60, C61, C62, C63, C64, C65, C66, C67, C68, C69, C70, C71, C72, C73, C74, C75, C76, C77, C78, C79, C80, C81, C82, C83, C84, C85, C86, C87, C88, C89, C90, C91, C92, C93, C94, C95, C96, C97, C98, C99, C100, C101, C102, C103, C104, C105, C106, C107, C108, C109, C110, C111, C112, C113, C114, C115, C116, C117, C118, C119, C120, C121, C122, C123, C124, C125, C126, C127, C128, C129, C130, UPDATE_DATE, REMARKS, CREATE_DATE, DEL_FLAG, UPDATE_BY, CREATE_BY
+    </sql>
+
+
+
+	<!--List<ClimateIndexVO> findClimateIndexListByTime(@Param("tm")  String tm);-->
+
+	<select id="findClimateIndexListByTime" parameterType="String" resultType="com.hhu.mlthfs.model.vo.ClimateIndexVO">
+		select A.id,A.climate_number,A.climate_name_zhcn,A.climate_name_en,B.climate_value
+		from
+			(SELECT id,climate_number,climate_name_zhcn,climate_name_en
+			from climate_name
+			order by id) A,
+			(select climate_number,climate_value
+			from (select *  from climate_index
+                    <where>
+                      ${ew.sqlSegment}
+                    </where> )
+			unpivot ( climate_value
+			for climate_number
+			in (c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,
+			c17,c18,c19,c20,c21,c22,c23,c24,c25,c26,c27,c28,c29,c30,c31,
+			c32,c33,c34,c35,c36,c37,c38,c39,c40,c41,c42,c43,c44,c45,c46,
+			c47,c48,c49,c50,c51,c52,c53,c54,c55,c56,c57,c58,c59,c60,c61,
+			c62,c63,c64,c65,c66,c67,c68,c69,c70,c71,c72,c73,c74,c75,c76,
+			c77,c78,c79,c80,c81,c82,c83,c84,c85,c86,c87,c88,c89,c90,c91,
+			c92,c93,c94,c95,c96,c97,c98,c99,c100,c101,c102,c103,c104,c105,
+			c106,c107,c108,c109,c110,c111,c112,c113,c114,c115,c116,c117,c118,
+			c119,c120,c121,c122,c123,c124,c125,c126,c127,c128,c129,c130)
+			)) B
+		where A.climate_number=B.climate_number
+
+
+
+
+	</select>
+
+
+</mapper>

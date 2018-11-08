@@ -1,0 +1,116 @@
+package com.hhu.mlthfs.controller.modelLibraryInfo;
+
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+/**
+ * 模型指南   的控制层
+ *
+ * 模型介绍 界面
+ * 模型管理 界面
+ *
+ */
+@RestController
+@RequestMapping("/modelManage")
+public class ModelManageController {
+
+    /**
+     * 系统进入模型介绍界面
+     * @return html
+     */
+    @GetMapping("/modelListsPage")
+    public ModelAndView modelList(){
+        ModelAndView mav=new ModelAndView("page/modelManage/modelList");
+        return mav;
+    }
+
+    /**
+     * 系统进入模型库管理界面
+     * 进行对模型方法库的增删改查==后期扩展用，
+     */
+    @GetMapping("/modelEditPage")
+    public ModelAndView modelEdit(){
+        ModelAndView mav=new ModelAndView("page/modelManage/modelEdit");
+        return mav;
+    }
+
+    /**
+     * 季节性自回归  SAP
+     *
+     */
+
+    @GetMapping("/sapDirection")
+    public ModelAndView sapDirectionPage(){
+
+        ModelAndView mav=new ModelAndView("page/modelManage/direction/sapDirection");
+        return mav;
+    }
+
+    /**
+     * 随机森林 RF
+     */
+    @GetMapping("/rfDirection")
+    public ModelAndView rfDirectionPage(){
+        ModelAndView mav=new ModelAndView("page/modelManage/direction/rfDirection");
+        return mav;
+    }
+
+    /**
+     * 支持向量机 SVM
+     */
+    @GetMapping("/svmDirection")
+    public ModelAndView svmDirectionPage(){
+        ModelAndView mav=new ModelAndView("page/modelManage/direction/svmDirection");
+        return mav;
+
+    }
+
+    /**
+     * 多元回归 MR
+     */
+    @GetMapping("/mrDirection")
+    public ModelAndView mrDirectionPage(){
+        ModelAndView mav=new ModelAndView("page/modelManage/direction/mrDirection");
+        return mav;
+    }
+
+    /**
+     * 小波分析 WA
+     */
+    @GetMapping("/waDirection")
+    public ModelAndView waDirectionPage(){
+        ModelAndView mav=new ModelAndView("page/modelManage/direction/waDirection");
+        return mav;
+    }
+
+    /**
+     * 误差自回归 ARU
+     */
+    @GetMapping("/aruDirection")
+    public ModelAndView aruDirectionPage(){
+        ModelAndView mav=new ModelAndView("page/modelManage/direction/aruDirection");
+        return mav;
+    }
+
+    /**
+     * 贝叶斯平均 BMA
+     */
+    @GetMapping("/bmaDirection")
+    public ModelAndView bmaDirectionPage(){
+        ModelAndView mav=new ModelAndView("page/modelManage/direction/bmaDirection");
+        return mav;
+    }
+
+    /**
+     * 不确定性分析 HUP
+     */
+    @GetMapping("/hupDirection")
+    public ModelAndView hupDirectionPage(){
+        ModelAndView mav=new ModelAndView("page/modelManage/direction/hupDirection");
+        return mav;
+    }
+
+}

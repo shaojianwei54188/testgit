@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>小波分析模型</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}" media="all"/>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
+    <link rel="stylesheet" th:href="@{/common/css/main.css}" media="all"/>
+</head>
+<body class="childrenBody">
+<div class="row" th:align="left"><h1>&nbsp;&nbsp;小波分析模型（WA）</h1><br><br></div>
+
+
+<div class="row" style="height: 350px">
+    <div class="sysNotice col" align="center">
+
+        <img th:src="@{/common/images/wa.jpg}" style="height: 350px">
+
+    </div>
+    <div class="sysNotice col">
+        <blockquote class="layui-elem-quote title">模型介绍</blockquote>
+        <div class="layui-elem-quote layui-quote-nm" style="font-size: large;line-height: 30px">
+            <ol>
+                <li>模型思想：</li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;利用小波变换的多分辨率功能，通过对复杂的时间序列分解和重构来实现中长期径流预报。</li>
+                <li>模型优点：</li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;将复杂的时间序列分解成不同频带的细节信号和背景信号序列</li>
+            </ol>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<div class="row">
+    <div class="sysNotice col">
+        <blockquote class="layui-elem-quote title">模型信息</blockquote>
+        <table class="layui-table">
+            <colgroup>
+                <col width="150">
+                <col>
+            </colgroup>
+            <tbody>
+            <tr>
+                <td>模型名称（中）</td>
+                <td class="version">小波分析模型</td>
+            </tr>
+            <tr>
+                <td>模型名称（英）</td>
+                <td class="author">WA</td>
+            </tr>
+            <tr>
+                <td>所属分类</td>
+                <td class="homePage">预报</td>
+            </tr>
+            <tr>
+                <td>预报因子</td>
+                <td class="dataBase">130项环流因子、前期降雨、前期径流等</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="sysNotice col">
+        <blockquote class="layui-elem-quote title">参数信息</blockquote>
+        <table class="layui-table">
+            <colgroup>
+                <col width="150">
+                <col>
+            </colgroup>
+            <tbody>
+            <tr>
+                <td>N</td>
+                <td class="version">离散数</td>
+            </tr>
+            <tr>
+                <td>Δt</td>
+                <td class="author">抽样时间间隔</td>
+            </tr>
+            <tr>
+                <td>φ<sub>t</sub></td>
+                <td class="homePage">基小波</td>
+            </tr>
+            <tr>
+                <td>W<sub>f</sub>(a,b)</td>
+                <td class="homePage">对应于不同尺度不同位置b的小波变换系数</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/lib/layui/layui.js}"></script>
+<script>
+    layui.use(['layer','jquery','form'],function(){
+        var layer = layui.layer,
+            $ = layui.jquery,
+            form = layui.form;
+
+        $(".panel a").on("click",function(){
+            window.parent.addTab($(this));
+        });
+    });
+</script>
+</body>
+
+</html>

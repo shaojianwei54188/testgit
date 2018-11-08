@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.TestResultDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.TestResult">
+		<id column="ID" property="id" />
+		<result column="PLAN_ID" property="planId" />
+		<result column="FORECAST_SECTION" property="forecastSection" />
+		<result column="FORECAST_TIME_START" property="forecastTimeStart" />
+		<result column="FORECAST_TIME" property="forecastTime" />
+		<result column="YEAR_NO" property="yearNo" />
+		<result column="MEASURED_VALUE" property="measuredValue" />
+		<result column="TEST_RESULT_VALUE" property="testResultValue" />
+		<result column="MODEL_NAME" property="modelName" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, PLAN_ID, FORECAST_SECTION, FORECAST_TIME_START, FORECAST_TIME, YEAR_NO, MEASURED_VALUE, TEST_RESULT_VALUE, MODEL_NAME
+    </sql>
+
+</mapper>

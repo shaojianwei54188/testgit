@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.SelectedFactorsDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.SelectedFactors">
+		<id column="ID" property="id" />
+		<result column="FORECAST_SECTION" property="forecastSection" />
+		<result column="FORECAST_TIME_START" property="forecastTimeStart" />
+		<result column="FORECAST_TIME" property="forecastTime" />
+		<result column="YEAR_NO" property="yearNo" />
+		<result column="MONTH_NO" property="monthNo" />
+		<result column="CLIMATE_INDEX_NO" property="climateIndexNo" />
+		<result column="CLIMATE_INDEX_NAME" property="climateIndexName" />
+		<result column="CLIMATE_INDEX_VALUE" property="climateIndexValue" />
+		<result column="CC_INDEX" property="ccIndex" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, FORECAST_SECTION, FORECAST_TIME_START, FORECAST_TIME, YEAR_NO, MONTH_NO, CLIMATE_INDEX_NO, CLIMATE_INDEX_NAME, CLIMATE_INDEX_VALUE, CC_INDEX
+    </sql>
+
+</mapper>

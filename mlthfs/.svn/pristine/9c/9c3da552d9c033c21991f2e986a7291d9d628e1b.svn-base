@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhu.mlthfs.mapper.ClimateNameDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.hhu.mlthfs.model.ClimateName">
+		<id column="ID" property="id" />
+		<result column="CLIMATE_NUMBER" property="climateNumber" />
+		<result column="CLIMATE_NAME_ZHCN" property="climateNameZhcn" />
+		<result column="CLIMATE_NAME_EN" property="climateNameEn" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, CLIMATE_NUMBER, CLIMATE_NAME_ZHCN, CLIMATE_NAME_EN
+    </sql>
+
+	<!--ClimateName findClimateNameByTm(String tm);-->
+
+	<select id="findAllClimateName" resultType="com.hhu.mlthfs.model.ClimateName" >
+		SELECT
+		    a.id,
+		    a.climate_number,
+		    a.CLIMATE_NAME_ZHCN,
+		    a.CLIMATE_NAME_EN
+		FROM climate_name a
+		WHERE 1=1
+		ORDER BY a.id
+	</select>
+
+</mapper>
